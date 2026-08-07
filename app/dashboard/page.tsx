@@ -8,6 +8,7 @@ import {
 import Sidebar from "@/src/components/dashboard/Sidebar";
 import StatCard from "@/src/components/dashboard/StatCard";
 import RecentInterviews from "@/src/components/dashboard/RecentInterviews";
+import ProgressChart from "@/src/components/dashboard/ProgressChart";
 
 export default function DashboardPage() {
   return (
@@ -64,6 +65,10 @@ export default function DashboardPage() {
               change="Across recent sessions"
               icon={TrendingUp}
             />
+          </div>
+
+          <div className="mt-8">
+            <ProgressChart />
           </div>
 
           <div className="mt-8 grid gap-6 xl:grid-cols-[1.4fr_1fr]">
