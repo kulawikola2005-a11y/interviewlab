@@ -6,6 +6,7 @@ import {
   Target,
   Trophy,
   TrendingUp,
+  ArrowUpRight,
 } from "lucide-react";
 
 import Sidebar from "@/src/components/dashboard/Sidebar";
@@ -37,40 +38,41 @@ export default async function DashboardPage() {
       : 0;
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen text-white">
       <Sidebar />
 
-      <div className="ml-64 px-8 py-8">
+      <div className="px-5 py-6 sm:px-6 lg:ml-64 lg:px-8 lg:py-8">
         <div className="mx-auto max-w-7xl">
-          <div className="flex items-start justify-between gap-6">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div className="flex items-center gap-2 text-blue-400">
                 <Sparkles size={17} />
 
-                <p className="text-sm font-medium">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em]">
                   Dashboard
                 </p>
               </div>
 
-              <h1 className="mt-3 text-3xl font-bold tracking-tight">
+              <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
                 Welcome back
               </h1>
 
-              <p className="mt-2 text-slate-400">
-                Track your CV performance and prepare for your next interview.
+              <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400 sm:text-base">
+                Track your resume performance, review AI feedback and prepare
+                for your next interview.
               </p>
             </div>
 
             <Link
               href="/dashboard/cv"
-              className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold transition hover:bg-blue-500"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-500"
             >
               <Plus size={18} />
               Analyze CV
             </Link>
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <StatCard
               title="CV analyses"
               value={String(resumes.length)}
@@ -116,23 +118,29 @@ export default async function DashboardPage() {
             />
           </div>
 
-          <div className="mt-8 grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
+          <div className="mt-8 grid gap-6 xl:grid-cols-[1.45fr_0.55fr]">
             <ResumeHistory resumes={resumes.slice(0, 5)} />
 
             <div className="space-y-6">
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-                <h2 className="text-xl font-semibold">
-                  Quick actions
-                </h2>
+              <section className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-6 shadow-sm">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    Next step
+                  </p>
 
-                <p className="mt-1 text-sm text-slate-500">
-                  Continue your preparation
-                </p>
+                  <h2 className="mt-2 text-xl font-semibold">
+                    Quick actions
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Continue your preparation
+                  </p>
+                </div>
 
                 <div className="mt-6 space-y-3">
                   <Link
                     href="/dashboard/cv"
-                    className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/50 p-4 transition hover:border-blue-500/50"
+                    className="group flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/50 p-4 transition hover:border-blue-500/40 hover:bg-slate-950"
                   >
                     <div>
                       <p className="font-medium text-white">
@@ -140,23 +148,23 @@ export default async function DashboardPage() {
                       </p>
 
                       <p className="mt-1 text-xs text-slate-500">
-                        Get AI-powered resume feedback
+                        Get targeted AI feedback
                       </p>
                     </div>
 
-                    <FileText
-                      size={20}
-                      className="text-blue-400"
+                    <ArrowUpRight
+                      size={19}
+                      className="text-slate-600 transition group-hover:text-blue-400"
                     />
                   </Link>
 
                   <Link
                     href="/dashboard/interview/new"
-                    className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/50 p-4 transition hover:border-blue-500/50"
+                    className="group flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/50 p-4 transition hover:border-violet-500/40 hover:bg-slate-950"
                   >
                     <div>
                       <p className="font-medium text-white">
-                        New interview
+                        Start interview
                       </p>
 
                       <p className="mt-1 text-xs text-slate-500">
@@ -164,35 +172,44 @@ export default async function DashboardPage() {
                       </p>
                     </div>
 
-                    <Sparkles
-                      size={20}
-                      className="text-purple-400"
+                    <ArrowUpRight
+                      size={19}
+                      className="text-slate-600 transition group-hover:text-violet-400"
                     />
                   </Link>
                 </div>
-              </div>
+              </section>
 
-              <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-6">
-                <p className="text-sm font-medium text-blue-400">
-                  InterviewLab AI
-                </p>
+              <section className="relative overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-slate-900/70 to-violet-500/10 p-6">
+                <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-blue-500/10 blur-3xl" />
 
-                <h3 className="mt-2 text-lg font-semibold">
-                  Turn feedback into practice
-                </h3>
+                <div className="relative">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                    <Sparkles size={19} />
+                  </div>
 
-                <p className="mt-3 text-sm leading-6 text-slate-400">
-                  Use questions generated from your CV to practice realistic
-                  interview scenarios.
-                </p>
+                  <p className="mt-5 text-sm font-medium text-blue-400">
+                    InterviewLab AI
+                  </p>
 
-                <Link
-                  href="/dashboard/interview/new"
-                  className="mt-5 inline-flex text-sm font-semibold text-blue-400 hover:text-blue-300"
-                >
-                  Start preparing →
-                </Link>
-              </div>
+                  <h3 className="mt-2 text-lg font-semibold">
+                    Turn feedback into practice
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
+                    Practice questions generated from your resume and prepare
+                    for realistic interview scenarios.
+                  </p>
+
+                  <Link
+                    href="/dashboard/interview/new"
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-400 transition hover:text-blue-300"
+                  >
+                    Start preparing
+                    <ArrowUpRight size={16} />
+                  </Link>
+                </div>
+              </section>
             </div>
           </div>
         </div>

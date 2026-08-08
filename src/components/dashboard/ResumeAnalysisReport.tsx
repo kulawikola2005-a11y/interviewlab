@@ -2,11 +2,14 @@ import Link from "next/link";
 import {
   AlertTriangle,
   ArrowRight,
+  Bot,
   CheckCircle2,
+  FileSearch,
   Lightbulb,
   MessageSquare,
   Sparkles,
   Target,
+  Trophy,
 } from "lucide-react";
 
 import type { ResumeAnalysis } from "@/src/lib/openai/types/resume-analysis";
@@ -18,15 +21,39 @@ type ResumeAnalysisReportProps = {
 export default function ResumeAnalysisReport({
   analysis,
 }: ResumeAnalysisReportProps) {
-  const score = Math.max(0, Math.min(100, analysis.overallScore));
+  const score = clampScore(analysis.overallScore);
 
-  function getScoreLabel() {
-    if (score >= 85) return "Excellent";
-    if (score >= 70) return "Strong";
-    if (score >= 55) return "Good foundation";
-    if (score >= 40) return "Needs improvement";
-    return "Major improvements needed";
-  }
+  const metrics = [
+    {
+      label: "ATS compatibility",
+      value: clampScore(analysis.metrics.atsCompatibility),
+      icon: FileSearch,
+    },
+    {
+      label: "Skills match",
+      value: clampScore(analysis.metrics.skillsMatch),
+      icon: Target,
+    },
+    {
+      label: "Experience relevance",
+      value: clampScore(analysis.metrics.experienceRelevance),
+      icon: Trophy,
+    },
+    {
+      label: "Impact",
+      value: clampScore(analysis.metrics.impact),
+      icon: Sparkles,
+    },
+    {
+      label: "Formatting",
+      value: clampScore(analysis.metrics.formatting),
+      icon: Bot,
+    },
+  ];
+
+  const lowestMetrics = [...metrics]
+    .sort((a, b) => a.value - b.value)
+    .slice(0, 2);
 
   return (
     <div className="space-y-6">
@@ -56,32 +83,101 @@ export default function ResumeAnalysisReport({
           <div>
             <div className="flex items-center gap-2 text-blue-400">
               <Sparkles size={18} />
+
               <p className="text-sm font-semibold uppercase tracking-[0.18em]">
                 AI Resume Analysis
               </p>
             </div>
 
             <h2 className="mt-4 text-3xl font-bold text-white">
-              {getScoreLabel()}
+              {getScoreLabel(score)}
             </h2>
 
             <p className="mt-4 max-w-3xl leading-7 text-slate-300">
               {analysis.summary}
             </p>
+          </div>
+        </div>
+      </section>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <div className="rounded-full border border-slate-700 bg-slate-950/60 px-4 py-2 text-sm text-slate-300">
-                {analysis.strengths.length} strengths
-              </div>
+      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
+            Score breakdown
+          </p>
 
-              <div className="rounded-full border border-slate-700 bg-slate-950/60 px-4 py-2 text-sm text-slate-300">
-                {analysis.improvements.length} recommendations
-              </div>
+          <h3 className="mt-2 text-xl font-semibold text-white">
+            Resume performance
+          </h3>
 
-              <div className="rounded-full border border-slate-700 bg-slate-950/60 px-4 py-2 text-sm text-slate-300">
-                {analysis.interviewQuestions.length} interview questions
+          <p className="mt-2 text-sm text-slate-500">
+            A closer look at the areas that contribute to your overall score.
+          </p>
+        </div>
+
+        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          {metrics.map((metric) => {
+            const Icon = metric.icon;
+
+            return (
+              <div
+                key={metric.label}
+                className="rounded-2xl border border-slate-800 bg-slate-950/50 p-5"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
+                    <Icon size={18} />
+                  </div>
+
+                  <span className="text-xl font-bold text-white">
+                    {metric.value}
+                  </span>
+                </div>
+
+                <p className="mt-4 text-sm font-medium text-slate-300">
+                  {metric.label}
+                </p>
+
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                  <div
+                    className="h-full rounded-full bg-blue-500"
+                    style={{
+                      width: `${metric.value}%`,
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-7">
+        <div className="flex items-start gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
+            <Target size={21} />
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-400">
+              Priority
+            </p>
+
+            <h3 className="mt-2 text-xl font-semibold text-white">
+              What to improve first
+            </h3>
+
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              Your lowest-scoring areas are{" "}
+              <span className="font-medium text-slate-200">
+                {lowestMetrics[0]?.label}
+              </span>{" "}
+              and{" "}
+              <span className="font-medium text-slate-200">
+                {lowestMetrics[1]?.label}
+              </span>
+              . Focus on these areas first for the biggest improvement.
+            </p>
           </div>
         </div>
       </section>
@@ -176,25 +272,19 @@ export default function ResumeAnalysisReport({
 
       <section className="rounded-3xl border border-blue-500/20 bg-blue-500/5 p-7">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
-              <Target size={22} />
-            </div>
+          <div>
+            <h3 className="text-xl font-semibold text-white">
+              Ready to practice?
+            </h3>
 
-            <div>
-              <h3 className="text-xl font-semibold text-white">
-                Ready to practice?
-              </h3>
-
-              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-400">
-                Continue with a mock interview and practice questions based on
-                your resume analysis.
-              </p>
-            </div>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-400">
+              Turn these recommendations into practice with a personalized mock
+              interview.
+            </p>
           </div>
 
           <Link
-            href="/dashboard/interview/room"
+            href="/dashboard/interview/new"
             className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
           >
             Start mock interview
@@ -204,6 +294,19 @@ export default function ResumeAnalysisReport({
       </section>
     </div>
   );
+}
+
+function clampScore(value: number) {
+  return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+function getScoreLabel(score: number) {
+  if (score >= 85) return "Excellent resume";
+  if (score >= 70) return "Strong resume";
+  if (score >= 55) return "Good foundation";
+  if (score >= 40) return "Needs improvement";
+
+  return "Major improvements needed";
 }
 
 function ReportSection({
