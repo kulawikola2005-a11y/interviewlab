@@ -17,7 +17,7 @@ export default function NewInterviewPage() {
           </h1>
 
           <p className="mt-3 text-slate-400">
-            Tell InterviewLab what role you're applying for. AI will generate
+            Tell InterviewLab what role you&apos;re applying for. AI will generate
             personalized interview questions based on your CV and the job offer.
           </p>
 
