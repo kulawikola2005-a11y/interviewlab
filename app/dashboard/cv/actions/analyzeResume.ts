@@ -64,6 +64,7 @@ export async function processResume(
           file_name: file.name,
           job_description: description || null,
           overall_score: analysis.overallScore,
+          metrics: analysis.metrics,
           summary: analysis.summary,
           strengths: analysis.strengths,
           weaknesses: analysis.weaknesses,
