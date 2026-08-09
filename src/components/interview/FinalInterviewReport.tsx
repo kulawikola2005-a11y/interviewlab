@@ -44,14 +44,14 @@ export default function FinalInterviewReport({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-slate-900/80 to-violet-500/10 p-8">
+      <section className="rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-slate-900/80 to-violet-500/10 p-5 sm:p-5 sm:p-7 lg:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
           Interview completed
         </p>
 
-        <div className="mt-5 flex flex-col gap-8 md:flex-row md:items-center">
+        <div className="mt-5 flex flex-col gap-5 sm:p-5 sm:p-7 lg:p-8 md:flex-row md:items-center">
           <div>
-            <p className="text-6xl font-bold text-white">
+            <p className="text-5xl sm:text-6xl font-bold text-white">
               {Math.round(report.overallScore)}
             </p>
 
@@ -61,7 +61,7 @@ export default function FinalInterviewReport({
           </div>
 
           <div className="max-w-2xl">
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
               Final interview report
             </h1>
 
@@ -72,7 +72,7 @@ export default function FinalInterviewReport({
         </div>
       </section>
 
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
         <h2 className="text-xl font-semibold text-white">
           Performance breakdown
         </h2>
@@ -107,7 +107,7 @@ export default function FinalInterviewReport({
       </section>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+        <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
           <div className="flex items-center gap-3">
             <Trophy className="text-emerald-400" size={20} />
 
@@ -135,7 +135,7 @@ export default function FinalInterviewReport({
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+        <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
           <div className="flex items-center gap-3">
             <TrendingUp className="text-amber-400" size={20} />
 
@@ -159,7 +159,7 @@ export default function FinalInterviewReport({
         </section>
       </div>
 
-      <section className="rounded-3xl border border-violet-500/20 bg-violet-500/5 p-7">
+      <section className="rounded-3xl border border-violet-500/20 bg-violet-500/5 p-5 sm:p-7">
         <div className="flex items-start gap-4">
           <Target
             size={22}
@@ -186,7 +186,7 @@ export default function FinalInterviewReport({
         </div>
       </section>
 
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
         <h2 className="text-xl font-semibold text-white">
           What to practice next
         </h2>

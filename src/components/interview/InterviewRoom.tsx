@@ -211,7 +211,7 @@ export default function InterviewRoom({
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
       <section className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60">
-        <div className="flex flex-col gap-5 border-b border-slate-800 px-7 py-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-5 border-b border-slate-800 px-5 py-5 sm:px-7 sm:py-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 shadow-lg shadow-blue-500/20">
               <Sparkles size={21} />
@@ -234,7 +234,7 @@ export default function InterviewRoom({
           </div>
         </div>
 
-        <div className="px-7 py-8">
+        <div className="px-5 py-6 sm:px-7 sm:py-8">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium text-slate-300">
@@ -280,7 +280,7 @@ export default function InterviewRoom({
             </div>
 
             <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
-              <p className="text-xl leading-9 text-white">
+              <p className="text-lg leading-8 text-white sm:text-xl sm:leading-9">
                 {currentQuestion}
               </p>
             </div>
@@ -305,7 +305,7 @@ export default function InterviewRoom({
                 className="mt-3 h-56 w-full resize-none rounded-2xl border border-slate-800 bg-slate-950/70 p-5 text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
               />
 
-              <div className="mt-3 flex justify-between text-xs text-slate-500">
+              <div className="mt-3 flex flex-col gap-2 text-xs text-slate-500 sm:flex-row sm:justify-between">
                 <span>
                   {answer.length} characters
                 </span>

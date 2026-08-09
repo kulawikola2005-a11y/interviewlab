@@ -89,7 +89,7 @@ export default function ResumeAnalysisReport({
   return (
     <div className="space-y-6">
       <section className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60">
-        <div className="grid gap-8 p-8 lg:grid-cols-[220px_1fr] lg:items-center">
+        <div className="grid gap-5 sm:p-5 sm:p-7 lg:p-8 p-5 sm:p-5 sm:p-7 lg:p-8 lg:grid-cols-[220px_1fr] lg:items-center">
           <div className="flex justify-center">
             <div
               className="relative flex h-44 w-44 items-center justify-center rounded-full"
@@ -100,7 +100,7 @@ export default function ResumeAnalysisReport({
               <div className="absolute inset-[10px] rounded-full bg-slate-950" />
 
               <div className="relative text-center">
-                <p className="text-5xl font-bold text-white">
+                <p className="text-4xl sm:text-5xl font-bold text-white">
                   {score}
                 </p>
 
@@ -120,7 +120,7 @@ export default function ResumeAnalysisReport({
               </p>
             </div>
 
-            <h2 className="mt-4 text-3xl font-bold text-white">
+            <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-white">
               {getScoreLabel(score)}
             </h2>
 
@@ -131,7 +131,7 @@ export default function ResumeAnalysisReport({
         </div>
       </section>
 
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
             Score breakdown
@@ -192,7 +192,7 @@ export default function ResumeAnalysisReport({
       </section>
 
       {topPriority && (
-        <section className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-7">
+        <section className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-5 sm:p-7">
           <div className="flex items-start gap-4">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
               <Target size={21} />
@@ -259,7 +259,7 @@ export default function ResumeAnalysisReport({
         />
       </div>
 
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
         <div className="flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
             <Lightbulb size={21} />
@@ -311,7 +311,7 @@ export default function ResumeAnalysisReport({
         )}
       </section>
 
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
         <div className="flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400">
             <MessageSquare size={21} />
@@ -361,7 +361,7 @@ export default function ResumeAnalysisReport({
         )}
       </section>
 
-      <section className="rounded-3xl border border-blue-500/20 bg-blue-500/5 p-7">
+      <section className="rounded-3xl border border-blue-500/20 bg-blue-500/5 p-5 sm:p-7">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
             <h3 className="text-xl font-semibold text-white">
@@ -468,7 +468,7 @@ function ReportSection({
   items: string[];
 }) {
   return (
-    <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+    <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
       <div className="flex items-start gap-4">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
           {icon}
