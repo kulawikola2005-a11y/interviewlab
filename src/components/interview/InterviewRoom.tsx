@@ -5,11 +5,23 @@ import {
   BriefcaseBusiness,
   CheckCircle2,
   Clock3,
+  LoaderCircle,
   MessageSquare,
   Send,
   Sparkles,
   Target,
 } from "lucide-react";
+
+import { evaluateAnswer } from "@/app/dashboard/interview/actions/evaluateAnswer";
+import { generateFinalReport } from "@/app/dashboard/interview/actions/generateFinalReport";
+
+import FinalInterviewReport from "@/src/components/interview/FinalInterviewReport";
+
+import type {
+  FinalInterviewReport as FinalReport,
+  InterviewTurn,
+  InterviewTurnEvaluation,
+} from "@/src/types/interview";
 
 type Props = {
   position: string;
@@ -20,19 +32,44 @@ export default function InterviewRoom({
   position,
   firstQuestion,
 }: Props) {
-  const [answer, setAnswer] = useState("");
-  const [seconds, setSeconds] = useState(0);
-
-  const questionIndex = 1;
   const totalQuestions = 10;
 
+  const [answer, setAnswer] = useState("");
+  const [seconds, setSeconds] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(1);
+
+  const [currentQuestion, setCurrentQuestion] =
+    useState(firstQuestion);
+
+  const [previousQuestions, setPreviousQuestions] =
+    useState<string[]>([firstQuestion]);
+
+  const [turns, setTurns] =
+    useState<InterviewTurn[]>([]);
+
+  const [evaluation, setEvaluation] =
+    useState<InterviewTurnEvaluation | null>(null);
+
+  const [finalReport, setFinalReport] =
+    useState<FinalReport | null>(null);
+
+  const [isEvaluating, setIsEvaluating] =
+    useState(false);
+
+  const [isGeneratingReport, setIsGeneratingReport] =
+    useState(false);
+
+  const [error, setError] = useState("");
+
   useEffect(() => {
+    if (finalReport) return;
+
     const timer = window.setInterval(() => {
       setSeconds((current) => current + 1);
     }, 1000);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [finalReport]);
 
   const minutes = Math.floor(seconds / 60)
     .toString()
@@ -42,7 +79,94 @@ export default function InterviewRoom({
     .toString()
     .padStart(2, "0");
 
-  const progress = (questionIndex / totalQuestions) * 100;
+  const progress =
+    (questionIndex / totalQuestions) * 100;
+
+  async function handleSubmit() {
+    if (!answer.trim() || isEvaluating) return;
+
+    setIsEvaluating(true);
+    setError("");
+
+    const result = await evaluateAnswer({
+      position,
+      question: currentQuestion,
+      answer,
+      previousQuestions,
+    });
+
+    if (!result.success) {
+      setError(result.error);
+      setIsEvaluating(false);
+      return;
+    }
+
+    const completedTurn: InterviewTurn = {
+      question: currentQuestion,
+      answer,
+      score: result.evaluation.score,
+      strengths: result.evaluation.strengths,
+      improvements:
+        result.evaluation.improvements,
+    };
+
+    setTurns((current) => [
+      ...current,
+      completedTurn,
+    ]);
+
+    setEvaluation(result.evaluation);
+    setIsEvaluating(false);
+  }
+
+  async function handleContinue() {
+    if (!evaluation) return;
+
+    if (questionIndex === totalQuestions) {
+      setIsGeneratingReport(true);
+      setError("");
+
+      const result = await generateFinalReport({
+        position,
+        turns,
+      });
+
+      if (!result.success) {
+        setError(result.error);
+        setIsGeneratingReport(false);
+        return;
+      }
+
+      setFinalReport(result.report);
+      setIsGeneratingReport(false);
+      return;
+    }
+
+    const nextQuestion = evaluation.nextQuestion;
+
+    setPreviousQuestions((current) => [
+      ...current,
+      nextQuestion,
+    ]);
+
+    setCurrentQuestion(nextQuestion);
+
+    setQuestionIndex((current) =>
+      Math.min(current + 1, totalQuestions)
+    );
+
+    setAnswer("");
+    setEvaluation(null);
+    setError("");
+  }
+
+  if (finalReport) {
+    return (
+      <FinalInterviewReport
+        report={finalReport}
+      />
+    );
+  }
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
@@ -74,11 +198,13 @@ export default function InterviewRoom({
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium text-slate-300">
-                Question {questionIndex} of {totalQuestions}
+                Question {questionIndex} of{" "}
+                {totalQuestions}
               </p>
 
               <p className="mt-1 text-xs text-slate-500">
-                Take your time and answer as if this were a real interview.
+                Answer naturally and support your
+                points with examples.
               </p>
             </div>
 
@@ -115,48 +241,174 @@ export default function InterviewRoom({
 
             <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
               <p className="text-xl leading-9 text-white">
-                {firstQuestion}
+                {currentQuestion}
               </p>
             </div>
           </div>
 
-          <div className="mt-8">
-            <label
-              htmlFor="answer"
-              className="text-sm font-medium text-slate-300"
-            >
-              Your answer
-            </label>
-
-            <textarea
-              id="answer"
-              value={answer}
-              onChange={(event) => setAnswer(event.target.value)}
-              placeholder="Write your answer as if you were speaking to the recruiter..."
-              className="mt-3 h-56 w-full resize-none rounded-2xl border border-slate-800 bg-slate-950/70 p-5 text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-            />
-
-            <div className="mt-3 flex flex-col gap-2 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-              <span>
-                {answer.length} characters
-              </span>
-
-              <span>
-                Aim for a clear, specific answer with examples
-              </span>
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <button
-                type="button"
-                disabled={!answer.trim()}
-                className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500 disabled:shadow-none"
+          {!evaluation ? (
+            <div className="mt-8">
+              <label
+                htmlFor="answer"
+                className="text-sm font-medium text-slate-300"
               >
-                Submit answer
-                <Send size={17} />
-              </button>
+                Your answer
+              </label>
+
+              <textarea
+                id="answer"
+                value={answer}
+                onChange={(event) =>
+                  setAnswer(event.target.value)
+                }
+                placeholder="Write your answer as if you were speaking to the recruiter..."
+                className="mt-3 h-56 w-full resize-none rounded-2xl border border-slate-800 bg-slate-950/70 p-5 text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
+              />
+
+              <div className="mt-3 flex justify-between text-xs text-slate-500">
+                <span>
+                  {answer.length} characters
+                </span>
+
+                <span>
+                  Use specific examples where possible
+                </span>
+              </div>
+
+              {error && (
+                <div className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
+                  {error}
+                </div>
+              )}
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={
+                    !answer.trim() ||
+                    isEvaluating
+                  }
+                  className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500"
+                >
+                  {isEvaluating ? (
+                    <>
+                      <LoaderCircle
+                        size={17}
+                        className="animate-spin"
+                      />
+                      Evaluating...
+                    </>
+                  ) : (
+                    <>
+                      Submit answer
+                      <Send size={17} />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="mt-8 space-y-5">
+              <div className="rounded-2xl border border-violet-500/20 bg-violet-500/5 p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-400">
+                  Recruiter
+                </p>
+
+                <p className="mt-3 leading-7 text-slate-200">
+                  {evaluation.recruiterReaction}
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-[140px_1fr]">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/50 p-5 text-center">
+                  <p className="text-xs text-slate-500">
+                    Answer score
+                  </p>
+
+                  <p className="mt-2 text-4xl font-bold text-white">
+                    {evaluation.score}
+                  </p>
+
+                  <p className="text-xs text-slate-600">
+                    /100
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/50 p-5">
+                  <p className="text-sm font-semibold text-white">
+                    Quick feedback
+                  </p>
+
+                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-400">
+                        What worked
+                      </p>
+
+                      {evaluation.strengths
+                        .slice(0, 2)
+                        .map((item) => (
+                          <p
+                            key={item}
+                            className="mt-2 text-sm text-slate-400"
+                          >
+                            • {item}
+                          </p>
+                        ))}
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-400">
+                        Improve
+                      </p>
+
+                      {evaluation.improvements
+                        .slice(0, 2)
+                        .map((item) => (
+                          <p
+                            key={item}
+                            className="mt-2 text-sm text-slate-400"
+                          >
+                            • {item}
+                          </p>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {error && (
+                <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
+                  {error}
+                </div>
+              )}
+
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleContinue}
+                  disabled={isGeneratingReport}
+                  className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:bg-slate-800"
+                >
+                  {isGeneratingReport ? (
+                    <>
+                      <LoaderCircle
+                        size={17}
+                        className="animate-spin"
+                      />
+                      Creating final report...
+                    </>
+                  ) : questionIndex ===
+                    totalQuestions ? (
+                    "Finish interview →"
+                  ) : (
+                    "Continue interview →"
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -180,30 +432,24 @@ export default function InterviewRoom({
           </div>
 
           <div className="mt-6 border-t border-slate-800 pt-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-              Session
-            </p>
+            <div className="flex justify-between text-sm">
+              <span className="text-slate-500">
+                Progress
+              </span>
 
-            <div className="mt-4 space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-slate-500">
-                  Questions
-                </span>
+              <span className="text-slate-300">
+                {questionIndex}/{totalQuestions}
+              </span>
+            </div>
 
-                <span className="text-slate-300">
-                  {questionIndex}/{totalQuestions}
-                </span>
-              </div>
+            <div className="mt-3 flex justify-between text-sm">
+              <span className="text-slate-500">
+                Answers completed
+              </span>
 
-              <div className="flex justify-between">
-                <span className="text-slate-500">
-                  Estimated time
-                </span>
-
-                <span className="text-slate-300">
-                  15–20 min
-                </span>
-              </div>
+              <span className="text-slate-300">
+                {turns.length}
+              </span>
             </div>
           </div>
         </section>
@@ -222,21 +468,10 @@ export default function InterviewRoom({
 
           <div className="mt-5 space-y-4">
             <Goal text="Use specific examples" />
-            <Goal text="Explain your own contribution" />
-            <Goal text="Mention the result or impact" />
+            <Goal text="Explain your contribution" />
+            <Goal text="Mention the outcome" />
             <Goal text="Keep the answer focused" />
           </div>
-        </section>
-
-        <section className="rounded-3xl border border-blue-500/20 bg-blue-500/5 p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-400">
-            Interview tip
-          </p>
-
-          <p className="mt-3 text-sm leading-6 text-slate-400">
-            For behavioral questions, try structuring your answer around the
-            situation, your task, the action you took and the final result.
-          </p>
         </section>
       </aside>
     </div>
