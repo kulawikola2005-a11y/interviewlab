@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import {
   AlertTriangle,
   ArrowRight,
@@ -21,6 +24,9 @@ type ResumeAnalysisReportProps = {
 export default function ResumeAnalysisReport({
   analysis,
 }: ResumeAnalysisReportProps) {
+  const [showAllImprovements, setShowAllImprovements] = useState(false);
+  const [showAllQuestions, setShowAllQuestions] = useState(false);
+
   const score = clampScore(analysis.overallScore);
 
   const safeMetrics = analysis.metrics ?? {
@@ -62,6 +68,8 @@ export default function ResumeAnalysisReport({
   const lowestMetrics = [...metrics]
     .sort((a, b) => a.value - b.value)
     .slice(0, 2);
+
+  const topPriority = lowestMetrics[0];
 
   return (
     <div className="space-y-6">
@@ -146,9 +154,17 @@ export default function ResumeAnalysisReport({
                   {metric.label}
                 </p>
 
-                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                <div className="mt-2">
+                  <span
+                    className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getMetricStatus(metric.value).className}`}
+                  >
+                    {getMetricStatus(metric.value).label}
+                  </span>
+                </div>
+
+                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-800">
                   <div
-                    className="h-full rounded-full bg-blue-500"
+                    className={`h-full rounded-full transition-all duration-500 ${getMetricStatus(metric.value).barClassName}`}
                     style={{
                       width: `${metric.value}%`,
                     }}
@@ -160,35 +176,57 @@ export default function ResumeAnalysisReport({
         </div>
       </section>
 
-      <section className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-7">
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
-            <Target size={21} />
+      {topPriority && (
+        <section className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-7">
+          <div className="flex items-start gap-4">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
+              <Target size={21} />
+            </div>
+
+            <div className="flex-1">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-400">
+                Top priority
+              </p>
+
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <h3 className="text-xl font-semibold text-white">
+                  {topPriority.label}
+                </h3>
+
+                <span className="rounded-full bg-amber-500/10 px-3 py-1 text-sm font-semibold text-amber-300">
+                  {topPriority.value}/100
+                </span>
+              </div>
+
+              <p className="mt-3 text-sm leading-6 text-slate-400">
+                This is currently the lowest-scoring part of your resume.
+                Improving it is likely to have the biggest impact on your next
+                analysis.
+              </p>
+
+              <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/50 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                  Recommended next action
+                </p>
+
+                <p className="mt-2 text-sm leading-6 text-slate-300">
+                  {getPriorityAdvice(topPriority.label)}
+                </p>
+              </div>
+
+              {lowestMetrics[1] && (
+                <p className="mt-4 text-xs text-slate-500">
+                  Secondary priority:{" "}
+                  <span className="font-medium text-slate-300">
+                    {lowestMetrics[1].label}
+                  </span>{" "}
+                  ({lowestMetrics[1].value}/100)
+                </p>
+              )}
+            </div>
           </div>
-
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-400">
-              Priority
-            </p>
-
-            <h3 className="mt-2 text-xl font-semibold text-white">
-              What to improve first
-            </h3>
-
-            <p className="mt-2 text-sm leading-6 text-slate-400">
-              Your lowest-scoring areas are{" "}
-              <span className="font-medium text-slate-200">
-                {lowestMetrics[0]?.label}
-              </span>{" "}
-              and{" "}
-              <span className="font-medium text-slate-200">
-                {lowestMetrics[1]?.label}
-              </span>
-              . Focus on these areas first for the biggest improvement.
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <div className="grid gap-6 xl:grid-cols-2">
         <ReportSection
@@ -224,7 +262,10 @@ export default function ResumeAnalysisReport({
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-2">
-          {analysis.improvements.map((item, index) => (
+          {(showAllImprovements
+            ? analysis.improvements
+            : analysis.improvements.slice(0, 5)
+          ).map((item, index) => (
             <div
               key={`${item}-${index}`}
               className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4"
@@ -241,6 +282,18 @@ export default function ResumeAnalysisReport({
             </div>
           ))}
         </div>
+
+        {analysis.improvements.length > 5 && (
+          <button
+            type="button"
+            onClick={() => setShowAllImprovements((current) => !current)}
+            className="mt-5 text-sm font-semibold text-blue-400 transition hover:text-blue-300"
+          >
+            {showAllImprovements
+              ? "Show fewer recommendations"
+              : `Show all ${analysis.improvements.length} recommendations`}
+          </button>
+        )}
       </section>
 
       <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
@@ -261,7 +314,10 @@ export default function ResumeAnalysisReport({
         </div>
 
         <div className="mt-6 space-y-3">
-          {analysis.interviewQuestions.map((question, index) => (
+          {(showAllQuestions
+            ? analysis.interviewQuestions
+            : analysis.interviewQuestions.slice(0, 5)
+          ).map((question, index) => (
             <div
               key={`${question}-${index}`}
               className="flex gap-4 rounded-2xl border border-slate-800 bg-slate-950/50 p-5"
@@ -276,6 +332,18 @@ export default function ResumeAnalysisReport({
             </div>
           ))}
         </div>
+
+        {analysis.interviewQuestions.length > 5 && (
+          <button
+            type="button"
+            onClick={() => setShowAllQuestions((current) => !current)}
+            className="mt-5 text-sm font-semibold text-blue-400 transition hover:text-blue-300"
+          >
+            {showAllQuestions
+              ? "Show fewer questions"
+              : `Show all ${analysis.interviewQuestions.length} questions`}
+          </button>
+        )}
       </section>
 
       <section className="rounded-3xl border border-blue-500/20 bg-blue-500/5 p-7">
@@ -306,6 +374,62 @@ export default function ResumeAnalysisReport({
 
 function clampScore(value: number) {
   return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+function getMetricStatus(score: number) {
+  if (score >= 80) {
+    return {
+      label: "Strong",
+      className: "bg-emerald-500/10 text-emerald-400",
+      barClassName: "bg-emerald-500",
+    };
+  }
+
+  if (score >= 60) {
+    return {
+      label: "Good",
+      className: "bg-blue-500/10 text-blue-400",
+      barClassName: "bg-blue-500",
+    };
+  }
+
+  if (score >= 40) {
+    return {
+      label: "Needs work",
+      className: "bg-amber-500/10 text-amber-400",
+      barClassName: "bg-amber-500",
+    };
+  }
+
+  return {
+    label: "Critical",
+    className: "bg-red-500/10 text-red-400",
+    barClassName: "bg-red-500",
+  };
+}
+
+function getPriorityAdvice(metric: string) {
+  const advice: Record<string, string> = {
+    "ATS compatibility":
+      "Use standard section headings, simple formatting and role-relevant keywords. Avoid layouts that may be difficult for applicant tracking systems to parse.",
+
+    "Skills match":
+      "Make the skills most relevant to the target role easier to find and support them with examples from projects, work, education or volunteering.",
+
+    "Experience relevance":
+      "Reframe your existing experience around responsibilities that transfer to the target position. Include relevant volunteering, projects, internships and informal experience.",
+
+    Impact:
+      "Replace generic responsibilities with outcomes. Add specific achievements, numbers, improvements, responsibilities or examples that show what changed because of your work.",
+
+    Formatting:
+      "Improve hierarchy and consistency. Use clear sections, concise bullet points, consistent spacing and a professional structure that recruiters can scan quickly.",
+  };
+
+  return (
+    advice[metric] ??
+    "Focus on adding clearer evidence and more role-specific information to strengthen this part of your resume."
+  );
 }
 
 function getScoreLabel(score: number) {
