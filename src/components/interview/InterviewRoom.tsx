@@ -14,6 +14,7 @@ import {
 
 import { evaluateAnswer } from "@/app/dashboard/interview/actions/evaluateAnswer";
 import { generateFinalReport } from "@/app/dashboard/interview/actions/generateFinalReport";
+import { saveInterview } from "@/app/dashboard/interview/actions/saveInterview";
 
 import FinalInterviewReport from "@/src/components/interview/FinalInterviewReport";
 
@@ -135,6 +136,17 @@ export default function InterviewRoom({
         setError(result.error);
         setIsGeneratingReport(false);
         return;
+      }
+
+      const saveResult = await saveInterview({
+        position,
+        turns,
+        report: result.report,
+        durationSeconds: seconds,
+      });
+
+      if (!saveResult.success) {
+        setError(saveResult.error);
       }
 
       setFinalReport(result.report);
