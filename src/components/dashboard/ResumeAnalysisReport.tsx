@@ -23,30 +23,38 @@ export default function ResumeAnalysisReport({
 }: ResumeAnalysisReportProps) {
   const score = clampScore(analysis.overallScore);
 
+  const safeMetrics = analysis.metrics ?? {
+    atsCompatibility: 0,
+    skillsMatch: 0,
+    experienceRelevance: 0,
+    impact: 0,
+    formatting: 0,
+  };
+
   const metrics = [
     {
       label: "ATS compatibility",
-      value: clampScore(analysis.metrics.atsCompatibility),
+      value: clampScore(safeMetrics.atsCompatibility),
       icon: FileSearch,
     },
     {
       label: "Skills match",
-      value: clampScore(analysis.metrics.skillsMatch),
+      value: clampScore(safeMetrics.skillsMatch),
       icon: Target,
     },
     {
       label: "Experience relevance",
-      value: clampScore(analysis.metrics.experienceRelevance),
+      value: clampScore(safeMetrics.experienceRelevance),
       icon: Trophy,
     },
     {
       label: "Impact",
-      value: clampScore(analysis.metrics.impact),
+      value: clampScore(safeMetrics.impact),
       icon: Sparkles,
     },
     {
       label: "Formatting",
-      value: clampScore(analysis.metrics.formatting),
+      value: clampScore(safeMetrics.formatting),
       icon: Bot,
     },
   ];

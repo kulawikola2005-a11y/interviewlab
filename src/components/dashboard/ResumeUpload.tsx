@@ -12,6 +12,8 @@ import {
 import { processResume } from "@/app/dashboard/cv/actions/analyzeResume";
 import type { ResumeAnalysis } from "@/src/lib/openai/types/resume-analysis";
 import ResumeAnalysisReport from "@/src/components/dashboard/ResumeAnalysisReport";
+import AnalysisProgress from "@/src/components/dashboard/AnalysisProgress";
+import Toast from "@/src/components/ui/Toast";
 
 export default function ResumeUpload() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,6 +24,11 @@ export default function ResumeUpload() {
   const [isLoading, setIsLoading] = useState(false);
   const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
   const [error, setError] = useState("");
+  const [analysisStep, setAnalysisStep] = useState(0);
+  const [toast, setToast] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   function handleFile(selectedFile?: File) {
     if (!selectedFile) return;
@@ -48,6 +55,13 @@ export default function ResumeUpload() {
     setIsLoading(true);
     setError("");
     setAnalysis(null);
+    setToast(null);
+    setAnalysisStep(0);
+
+    const timers = [
+      window.setTimeout(() => setAnalysisStep(1), 1200),
+      window.setTimeout(() => setAnalysisStep(2), 3200),
+    ];
 
     const formData = new FormData();
     formData.append("resume", file);
@@ -56,14 +70,46 @@ export default function ResumeUpload() {
     try {
       const result = await processResume(formData);
 
+      timers.forEach(window.clearTimeout);
+
       if (!result.success) {
         setError(result.error);
+
+        setToast({
+          type: "error",
+          message: result.error,
+        });
+
         return;
       }
 
+      setAnalysisStep(2);
       setAnalysis(result.analysis);
+
+      setToast({
+        type: "success",
+        message: "Your CV analysis is ready.",
+      });
+
+      window.setTimeout(() => {
+        document
+          .getElementById("resume-analysis-results")
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+      }, 150);
     } catch {
-      setError("Unable to analyze this CV.");
+      timers.forEach(window.clearTimeout);
+
+      const message = "Unable to analyze this CV.";
+
+      setError(message);
+
+      setToast({
+        type: "error",
+        message,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -194,8 +240,22 @@ export default function ResumeUpload() {
         </button>
       </div>
 
+      {isLoading && (
+        <AnalysisProgress step={analysisStep} />
+      )}
+
       {analysis && (
-        <ResumeAnalysisReport analysis={analysis} />
+        <div id="resume-analysis-results">
+          <ResumeAnalysisReport analysis={analysis} />
+        </div>
+      )}
+
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
       )}
     </div>
   );

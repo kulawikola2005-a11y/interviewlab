@@ -1,29 +1,22 @@
 export interface InterviewQuestion {
   id: string;
   question: string;
+  category:
+    | "general"
+    | "experience"
+    | "technical"
+    | "behavioral"
+    | "motivation";
 }
 
-export interface InterviewAnswer {
-  questionId: string;
-  answer: string;
-
-  score?: number;
-
-  feedback?: string;
-}
-
-export interface InterviewSession {
-  id: string;
-
-  company: string;
-
-  position: string;
-
-  createdAt: string;
-
-  overallScore?: number;
-
-  questions: InterviewQuestion[];
-
-  answers: InterviewAnswer[];
+export interface AnswerEvaluation {
+  score: number;
+  relevance: number;
+  clarity: number;
+  specificity: number;
+  structure: number;
+  strengths: string[];
+  improvements: string[];
+  feedback: string;
+  betterAnswer: string;
 }

@@ -4,6 +4,7 @@ import {
   FileText,
   MessageSquare,
   BarChart3,
+  GitCompareArrows,
   Settings,
   LogOut,
   Sparkles,
@@ -29,6 +30,11 @@ const navigation = [
     name: "Progress",
     href: "/dashboard/progress",
     icon: BarChart3,
+  },
+  {
+    name: "Compare CVs",
+    href: "/dashboard/compare",
+    icon: GitCompareArrows,
   },
   {
     name: "Settings",
