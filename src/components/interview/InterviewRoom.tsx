@@ -26,11 +26,15 @@ import type {
 
 type Props = {
   position: string;
+  company?: string;
+  jobDescription?: string;
   firstQuestion: string;
 };
 
 export default function InterviewRoom({
   position,
+  company,
+  jobDescription,
   firstQuestion,
 }: Props) {
   const totalQuestions = 10;
@@ -91,6 +95,8 @@ export default function InterviewRoom({
 
     const result = await evaluateAnswer({
       position,
+      company,
+      jobDescription,
       question: currentQuestion,
       answer,
       previousQuestions,
@@ -440,6 +446,12 @@ export default function InterviewRoom({
               <p className="font-semibold text-white">
                 {position}
               </p>
+
+              {company && (
+                <p className="mt-1 text-xs text-slate-500">
+                  {company}
+                </p>
+              )}
             </div>
           </div>
 

@@ -15,11 +15,15 @@ export type EvaluateAnswerResult =
 
 export async function evaluateAnswer({
   position,
+  company,
+  jobDescription,
   question,
   answer,
   previousQuestions,
 }: {
   position: string;
+  company?: string;
+  jobDescription?: string;
   question: string;
   answer: string;
   previousQuestions: string[];
@@ -34,6 +38,8 @@ export async function evaluateAnswer({
   try {
     const evaluation = await evaluateInterviewAnswer({
       position,
+      company,
+      jobDescription,
       question,
       answer,
       previousQuestions,

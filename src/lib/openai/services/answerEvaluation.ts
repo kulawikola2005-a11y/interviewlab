@@ -6,17 +6,23 @@ import type { InterviewTurnEvaluation } from "@/src/types/interview";
 
 export async function evaluateInterviewAnswer({
   position,
+  company,
+  jobDescription,
   question,
   answer,
   previousQuestions,
 }: {
   position: string;
+  company?: string;
+  jobDescription?: string;
   question: string;
   answer: string;
   previousQuestions: string[];
 }): Promise<InterviewTurnEvaluation> {
   const prompt = buildAnswerEvaluationPrompt({
     position,
+    company,
+    jobDescription,
     question,
     answer,
     previousQuestions,

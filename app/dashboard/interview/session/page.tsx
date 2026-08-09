@@ -1,5 +1,5 @@
 import Sidebar from "@/src/components/dashboard/Sidebar";
-import InterviewRoom from "@/src/components/interview/InterviewRoom";
+import InterviewSessionLoader from "@/src/components/interview/InterviewSessionLoader";
 
 export default function InterviewSessionPage() {
   return (
@@ -8,10 +8,7 @@ export default function InterviewSessionPage() {
 
       <div className="px-5 py-6 sm:px-6 lg:ml-64 lg:px-8 lg:py-8">
         <div className="mx-auto max-w-7xl">
-          <InterviewRoom
-            position="Frontend Developer"
-            firstQuestion="Tell me about a challenging project you worked on and what you learned from it."
-          />
+          <InterviewSessionLoader />
         </div>
       </div>
     </main>
