@@ -1,6 +1,7 @@
 "use server";
 
 import { generateInterviewQuestion } from "@/src/lib/openai/services/interview";
+import type { InterviewStyle } from "@/src/types/interview-style";
 
 export type GenerateQuestionResult =
   | {
@@ -16,7 +17,8 @@ export async function generateQuestion(
   position: string,
   company: string,
   jobDescription: string,
-  previousQuestions: string[]
+  previousQuestions: string[],
+  interviewStyle: InterviewStyle
 ): Promise<GenerateQuestionResult> {
   if (!position.trim()) {
     return {
@@ -31,6 +33,7 @@ export async function generateQuestion(
       company,
       jobDescription,
       previousQuestions,
+      interviewStyle,
     });
 
     return {

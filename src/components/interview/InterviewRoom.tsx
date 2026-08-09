@@ -28,6 +28,23 @@ type Props = {
   position: string;
   company?: string;
   jobDescription?: string;
+
+  resumeContext?: {
+    overallScore: number;
+    summary: string;
+    metrics?: {
+      atsCompatibility: number;
+      skillsMatch: number;
+      experienceRelevance: number;
+      impact: number;
+      formatting: number;
+    };
+    strengths: string[];
+    weaknesses: string[];
+    improvements: string[];
+    interviewQuestions: string[];
+  } | null;
+
   firstQuestion: string;
 };
 
@@ -35,6 +52,7 @@ export default function InterviewRoom({
   position,
   company,
   jobDescription,
+  resumeContext,
   firstQuestion,
 }: Props) {
   const totalQuestions = 10;
@@ -97,6 +115,7 @@ export default function InterviewRoom({
       position,
       company,
       jobDescription,
+      resumeContext,
       question: currentQuestion,
       answer,
       previousQuestions,
@@ -146,6 +165,9 @@ export default function InterviewRoom({
 
       const saveResult = await saveInterview({
         position,
+        company,
+        jobDescription,
+        interviewStyle,
         turns,
         report: result.report,
         durationSeconds: seconds,

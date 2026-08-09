@@ -2,7 +2,7 @@ import "server-only";
 
 import { createClient } from "@/src/lib/supabase/server";
 
-export async function getInterviewHistory() {
+export async function getInterviewProgress() {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -10,19 +10,16 @@ export async function getInterviewHistory() {
     .select(`
       id,
       position,
-      company,
-      interview_style,
       overall_score,
-      hiring_recommendation,
-      duration_seconds,
+      metrics,
       created_at
     `)
     .order("created_at", {
-      ascending: false,
+      ascending: true,
     });
 
   if (error) {
-    console.log("Interview history query failed:");
+    console.log("Interview progress query failed:");
     console.log("message:", error.message);
     console.log("code:", error.code);
 

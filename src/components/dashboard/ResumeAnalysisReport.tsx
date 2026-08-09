@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AlertTriangle,
   ArrowRight,
@@ -28,6 +28,21 @@ export default function ResumeAnalysisReport({
   const [showAllQuestions, setShowAllQuestions] = useState(false);
 
   const score = clampScore(analysis.overallScore);
+
+  useEffect(() => {
+    window.sessionStorage.setItem(
+      "interviewlab-resume-context",
+      JSON.stringify({
+        overallScore: analysis.overallScore,
+        summary: analysis.summary,
+        metrics: analysis.metrics,
+        strengths: analysis.strengths,
+        weaknesses: analysis.weaknesses,
+        improvements: analysis.improvements,
+        interviewQuestions: analysis.interviewQuestions,
+      })
+    );
+  }, [analysis]);
 
   const safeMetrics = analysis.metrics ?? {
     atsCompatibility: 0,
@@ -360,7 +375,7 @@ export default function ResumeAnalysisReport({
           </div>
 
           <Link
-            href="/dashboard/interview/new"
+            href="/dashboard/interview/new?fromResume=true"
             className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
           >
             Start mock interview

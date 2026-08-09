@@ -12,6 +12,7 @@ import Sidebar from "@/src/components/dashboard/Sidebar";
 import StatCard from "@/src/components/dashboard/StatCard";
 import ResumeHistory from "@/src/components/dashboard/ResumeHistory";
 import InterviewHistory from "@/src/components/dashboard/InterviewHistory";
+import OnboardingCard from "@/src/components/dashboard/OnboardingCard";
 
 import { getResumeHistory } from "@/src/lib/resume/getResumeHistory";
 import { getInterviewHistory } from "@/src/lib/interview/getInterviewHistory";
@@ -102,6 +103,11 @@ export default async function DashboardPage() {
               </Link>
             </div>
           </div>
+
+          <OnboardingCard
+            resumeCount={resumes.length}
+            interviewCount={interviews.length}
+          />
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <StatCard

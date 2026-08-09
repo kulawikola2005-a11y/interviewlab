@@ -2,6 +2,7 @@ import "server-only";
 
 import { openai } from "./openai";
 import { buildInterviewQuestionPrompt } from "../prompts/interviewPrompt";
+import type { InterviewStyle } from "@/src/types/interview-style";
 
 export async function generateInterviewQuestion({
   position,
@@ -9,12 +10,14 @@ export async function generateInterviewQuestion({
   jobDescription,
   resumeSummary,
   previousQuestions,
+  interviewStyle,
 }: {
   position: string;
   company?: string;
   jobDescription?: string;
   resumeSummary?: string;
   previousQuestions?: string[];
+  interviewStyle: InterviewStyle;
 }) {
   const prompt = buildInterviewQuestionPrompt({
     position,
@@ -22,6 +25,7 @@ export async function generateInterviewQuestion({
     jobDescription,
     resumeSummary,
     previousQuestions,
+    interviewStyle,
   });
 
   const response = await openai.responses.create({

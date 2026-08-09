@@ -3,10 +3,20 @@ import Link from "next/link";
 type InterviewSession = {
   id: string;
   position: string;
+  company: string | null;
+  interview_style: string | null;
   overall_score: number | null;
   hiring_recommendation: string | null;
   duration_seconds: number;
   created_at: string;
+};
+
+const styleLabels: Record<string, string> = {
+  friendly: "Friendly Recruiter",
+  hr: "HR",
+  technical: "Technical Lead",
+  startup: "Startup Founder",
+  stress: "Stress Interview",
 };
 
 export default function InterviewHistory({
@@ -23,13 +33,13 @@ export default function InterviewHistory({
           </h2>
 
           <p className="mt-1 text-sm text-slate-500">
-            Your latest AI mock interview sessions
+            Your latest AI interview sessions
           </p>
         </div>
 
         <Link
           href="/dashboard/interview/new"
-          className="text-sm font-medium text-blue-400 transition hover:text-blue-300"
+          className="text-sm font-medium text-blue-400 hover:text-blue-300"
         >
           Start interview
         </Link>
@@ -53,13 +63,16 @@ export default function InterviewHistory({
           interviews.map((interview) => {
             const minutes = Math.max(
               1,
-              Math.round(interview.duration_seconds / 60)
+              Math.round(
+                interview.duration_seconds / 60
+              )
             );
 
             return (
-              <div
+              <Link
                 key={interview.id}
-                className="rounded-xl border border-slate-800 bg-slate-950/50 p-5"
+                href={`/dashboard/interviews/${interview.id}`}
+                className="block rounded-xl border border-slate-800 bg-slate-950/50 p-5 transition hover:border-blue-500/40 hover:bg-slate-950"
               >
                 <div className="flex items-center justify-between gap-5">
                   <div className="min-w-0">
@@ -67,18 +80,40 @@ export default function InterviewHistory({
                       {interview.position}
                     </p>
 
-                    <p className="mt-1 text-sm text-slate-500">
-                      {new Date(interview.created_at).toLocaleDateString(
-                        "en-GB",
-                        {
+                    {interview.company && (
+                      <p className="mt-1 text-sm text-slate-400">
+                        {interview.company}
+                      </p>
+                    )}
+
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                      <span>
+                        {new Date(
+                          interview.created_at
+                        ).toLocaleDateString("en-GB", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",
-                        }
+                        })}
+                      </span>
+
+                      <span>•</span>
+
+                      <span>{minutes} min</span>
+
+                      {interview.interview_style && (
+                        <>
+                          <span>•</span>
+
+                          <span>
+                            {styleLabels[
+                              interview.interview_style
+                            ] ??
+                              interview.interview_style}
+                          </span>
+                        </>
                       )}
-                      {" · "}
-                      {minutes} min
-                    </p>
+                    </div>
                   </div>
 
                   <div className="shrink-0 text-right">
@@ -91,7 +126,7 @@ export default function InterviewHistory({
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })
         )}

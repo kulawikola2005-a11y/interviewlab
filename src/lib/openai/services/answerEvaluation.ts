@@ -2,12 +2,16 @@ import "server-only";
 
 import { openai } from "./openai";
 import { buildAnswerEvaluationPrompt } from "../prompts/answerEvaluationPrompt";
+
 import type { InterviewTurnEvaluation } from "@/src/types/interview";
+import type { InterviewStyle } from "@/src/types/interview-style";
 
 export async function evaluateInterviewAnswer({
   position,
   company,
   jobDescription,
+  resumeContext,
+  interviewStyle,
   question,
   answer,
   previousQuestions,
@@ -15,6 +19,19 @@ export async function evaluateInterviewAnswer({
   position: string;
   company?: string;
   jobDescription?: string;
+
+  resumeContext?: {
+    overallScore: number;
+    summary: string;
+    metrics?: Record<string, number>;
+    strengths: string[];
+    weaknesses: string[];
+    improvements: string[];
+    interviewQuestions: string[];
+  } | null;
+
+  interviewStyle: InterviewStyle;
+
   question: string;
   answer: string;
   previousQuestions: string[];
@@ -23,6 +40,8 @@ export async function evaluateInterviewAnswer({
     position,
     company,
     jobDescription,
+    resumeContext,
+    interviewStyle,
     question,
     answer,
     previousQuestions,

@@ -2,6 +2,7 @@
 
 import { evaluateInterviewAnswer } from "@/src/lib/openai/services/answerEvaluation";
 import type { InterviewTurnEvaluation } from "@/src/types/interview";
+import type { InterviewStyle } from "@/src/types/interview-style";
 
 export type EvaluateAnswerResult =
   | {
@@ -17,6 +18,8 @@ export async function evaluateAnswer({
   position,
   company,
   jobDescription,
+  resumeContext,
+  interviewStyle,
   question,
   answer,
   previousQuestions,
@@ -24,6 +27,19 @@ export async function evaluateAnswer({
   position: string;
   company?: string;
   jobDescription?: string;
+
+  resumeContext?: {
+    overallScore: number;
+    summary: string;
+    metrics?: Record<string, number>;
+    strengths: string[];
+    weaknesses: string[];
+    improvements: string[];
+    interviewQuestions: string[];
+  } | null;
+
+  interviewStyle: InterviewStyle;
+
   question: string;
   answer: string;
   previousQuestions: string[];
@@ -40,6 +56,8 @@ export async function evaluateAnswer({
       position,
       company,
       jobDescription,
+      resumeContext,
+      interviewStyle,
       question,
       answer,
       previousQuestions,

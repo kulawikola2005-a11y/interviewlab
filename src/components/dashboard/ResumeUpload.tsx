@@ -260,34 +260,3 @@ export default function ResumeUpload() {
     </div>
   );
 }
-
-function AnalysisList({
-  title,
-  items,
-}: {
-  title: string;
-  items: string[];
-}) {
-  return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-      <h3 className="text-xl font-semibold text-white">
-        {title}
-      </h3>
-
-      <div className="mt-5 space-y-3">
-        {items.map((item, index) => (
-          <div
-            key={`${item}-${index}`}
-            className="flex gap-3 text-sm leading-6 text-slate-300"
-          >
-            <CheckCircle2
-              size={18}
-              className="mt-0.5 shrink-0 text-blue-400"
-            />
-            {item}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}

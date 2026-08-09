@@ -11,6 +11,10 @@ import {
 } from "lucide-react";
 
 import { generateQuestion } from "@/app/dashboard/interview/actions/generateQuestion";
+import {
+  interviewStyles,
+  type InterviewStyle,
+} from "@/src/types/interview-style";
 
 export default function NewInterviewForm() {
   const router = useRouter();
@@ -18,6 +22,10 @@ export default function NewInterviewForm() {
   const [position, setPosition] = useState("");
   const [company, setCompany] = useState("");
   const [jobDescription, setJobDescription] = useState("");
+  const [interviewStyle, setInterviewStyle] =
+    useState<InterviewStyle>("friendly");
+  const [interviewStyle, setInterviewStyle] =
+    useState<InterviewStyle>("friendly");
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState("");
@@ -40,7 +48,8 @@ export default function NewInterviewForm() {
         position,
         company,
         jobDescription,
-        []
+        [],
+        interviewStyle
       );
 
       if (!result.success) {
@@ -48,11 +57,21 @@ export default function NewInterviewForm() {
         return;
       }
 
+      const resumeContextRaw = window.sessionStorage.getItem(
+        "interviewlab-resume-context"
+      );
+
+      const resumeContext = resumeContextRaw
+        ? JSON.parse(resumeContextRaw)
+        : null;
+
       const interviewSetup = {
         position: position.trim(),
         company: company.trim(),
         jobDescription: jobDescription.trim(),
         firstQuestion: result.question,
+        interviewStyle,
+        resumeContext,
       };
 
       window.sessionStorage.setItem(
@@ -156,6 +175,43 @@ export default function NewInterviewForm() {
           <span className="text-xs text-slate-600">
             {jobDescription.length.toLocaleString()} characters
           </span>
+        </div>
+      </div>
+
+      <div>
+        <p className="mb-3 text-sm font-medium text-slate-300">
+          Interview style
+        </p>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          {interviewStyles.map((style) => {
+            const selected = interviewStyle === style.id;
+
+            return (
+              <button
+                key={style.id}
+                type="button"
+                onClick={() => setInterviewStyle(style.id)}
+                className={`rounded-xl border p-4 text-left transition ${
+                  selected
+                    ? "border-blue-500 bg-blue-500/10"
+                    : "border-slate-800 bg-slate-950/50 hover:border-slate-700"
+                }`}
+              >
+                <p
+                  className={`text-sm font-semibold ${
+                    selected ? "text-blue-300" : "text-white"
+                  }`}
+                >
+                  {style.name}
+                </p>
+
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  {style.description}
+                </p>
+              </button>
+            );
+          })}
         </div>
       </div>
 

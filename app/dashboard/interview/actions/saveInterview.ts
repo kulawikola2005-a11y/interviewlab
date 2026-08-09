@@ -7,13 +7,21 @@ import type {
   InterviewTurn,
 } from "@/src/types/interview";
 
+import type { InterviewStyle } from "@/src/types/interview-style";
+
 export async function saveInterview({
   position,
+  company,
+  jobDescription,
+  interviewStyle,
   turns,
   report,
   durationSeconds,
 }: {
   position: string;
+  company?: string;
+  jobDescription?: string;
+  interviewStyle: InterviewStyle;
   turns: InterviewTurn[];
   report: FinalInterviewReport;
   durationSeconds: number;
@@ -37,14 +45,23 @@ export async function saveInterview({
     .insert({
       user_id: user.id,
       position,
+      company: company || null,
+      job_description: jobDescription || null,
+      interview_style: interviewStyle,
+
       overall_score: report.overallScore,
       metrics: report.metrics,
       summary: report.summary,
+
       strongest_areas: report.strongestAreas,
       areas_to_improve: report.areasToImprove,
-      hiring_recommendation: report.hiringRecommendation,
+
+      hiring_recommendation:
+        report.hiringRecommendation,
+
       hiring_reason: report.hiringReason,
       next_steps: report.nextSteps,
+
       turns,
       duration_seconds: durationSeconds,
     })
@@ -52,7 +69,9 @@ export async function saveInterview({
     .single();
 
   if (error) {
-    console.log("Interview save failed:", error.message);
+    console.log("Interview save failed:");
+    console.log("message:", error.message);
+    console.log("code:", error.code);
 
     return {
       success: false,
