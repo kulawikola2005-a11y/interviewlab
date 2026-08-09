@@ -1,40 +1,61 @@
 import Link from "next/link";
 import {
   FileText,
+  MessageSquare,
   Plus,
   Sparkles,
   Target,
   Trophy,
-  TrendingUp,
-  ArrowUpRight,
 } from "lucide-react";
 
 import Sidebar from "@/src/components/dashboard/Sidebar";
 import StatCard from "@/src/components/dashboard/StatCard";
 import ResumeHistory from "@/src/components/dashboard/ResumeHistory";
+import InterviewHistory from "@/src/components/dashboard/InterviewHistory";
+
 import { getResumeHistory } from "@/src/lib/resume/getResumeHistory";
+import { getInterviewHistory } from "@/src/lib/interview/getInterviewHistory";
 
 export default async function DashboardPage() {
-  const resumes = await getResumeHistory();
+  const [resumes, interviews] = await Promise.all([
+    getResumeHistory(),
+    getInterviewHistory(),
+  ]);
 
-  const scores = resumes.map((resume) => resume.overall_score);
+  const resumeScores = resumes.map(
+    (resume) => resume.overall_score
+  );
 
-  const averageScore =
-    scores.length > 0
+  const interviewScores = interviews
+    .map((interview) => interview.overall_score)
+    .filter(
+      (score): score is number =>
+        typeof score === "number"
+    );
+
+  const averageResumeScore =
+    resumeScores.length > 0
       ? Math.round(
-          scores.reduce((sum, score) => sum + score, 0) /
-            scores.length
+          resumeScores.reduce(
+            (sum, score) => sum + score,
+            0
+          ) / resumeScores.length
         )
       : 0;
 
-  const bestScore =
-    scores.length > 0
-      ? Math.max(...scores)
+  const averageInterviewScore =
+    interviewScores.length > 0
+      ? Math.round(
+          interviewScores.reduce(
+            (sum, score) => sum + score,
+            0
+          ) / interviewScores.length
+        )
       : 0;
 
-  const latestScore =
-    scores.length > 0
-      ? scores[0]
+  const bestInterviewScore =
+    interviewScores.length > 0
+      ? Math.max(...interviewScores)
       : 0;
 
   return (
@@ -58,160 +79,108 @@ export default async function DashboardPage() {
               </h1>
 
               <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400 sm:text-base">
-                Track your resume performance, review AI feedback and prepare
-                for your next interview.
+                Track your CV performance and mock interview progress in one
+                place.
               </p>
             </div>
 
-            <Link
-              href="/dashboard/cv"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-500"
-            >
-              <Plus size={18} />
-              Analyze CV
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/dashboard/cv"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold transition hover:border-slate-600"
+              >
+                <FileText size={17} />
+                Analyze CV
+              </Link>
+
+              <Link
+                href="/dashboard/interview/new"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-500"
+              >
+                <Plus size={18} />
+                Start interview
+              </Link>
+            </div>
           </div>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <StatCard
               title="CV analyses"
               value={String(resumes.length)}
-              change={
-                resumes.length === 1
-                  ? "1 resume analyzed"
-                  : `${resumes.length} resumes analyzed`
-              }
+              change={`${averageResumeScore}% average score`}
               icon={FileText}
             />
 
             <StatCard
-              title="Average CV score"
-              value={`${averageScore}%`}
+              title="Mock interviews"
+              value={String(interviews.length)}
               change={
-                resumes.length > 0
-                  ? "Across all analyses"
-                  : "Analyze your first CV"
+                interviews.length > 0
+                  ? "Completed AI sessions"
+                  : "Start your first session"
+              }
+              icon={MessageSquare}
+            />
+
+            <StatCard
+              title="Interview average"
+              value={`${averageInterviewScore}%`}
+              change={
+                interviewScores.length > 0
+                  ? "Across completed interviews"
+                  : "No interview scores yet"
               }
               icon={Target}
             />
 
             <StatCard
-              title="Best CV score"
-              value={`${bestScore}%`}
+              title="Best interview"
+              value={`${bestInterviewScore}%`}
               change={
-                resumes.length > 0
+                interviewScores.length > 0
                   ? "Your highest result"
-                  : "No score yet"
+                  : "No result yet"
               }
               icon={Trophy}
             />
+          </div>
 
-            <StatCard
-              title="Latest score"
-              value={`${latestScore}%`}
-              change={
-                resumes.length > 0
-                  ? "Most recent analysis"
-                  : "No recent analysis"
-              }
-              icon={TrendingUp}
+          <div className="mt-8 grid gap-6 xl:grid-cols-2">
+            <ResumeHistory
+              resumes={resumes.slice(0, 4)}
+            />
+
+            <InterviewHistory
+              interviews={interviews.slice(0, 4)}
             />
           </div>
 
-          <div className="mt-8 grid gap-6 xl:grid-cols-[1.45fr_0.55fr]">
-            <ResumeHistory resumes={resumes.slice(0, 5)} />
+          <section className="mt-8 rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-slate-900/70 to-violet-500/10 p-7">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
+                  Your next step
+                </p>
 
-            <div className="space-y-6">
-              <section className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-6 shadow-sm">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Next step
-                  </p>
+                <h2 className="mt-2 text-2xl font-bold">
+                  Turn CV feedback into interview practice
+                </h2>
 
-                  <h2 className="mt-2 text-xl font-semibold">
-                    Quick actions
-                  </h2>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
+                  Use your resume analysis to practice realistic questions,
+                  improve weak areas and track your interview performance over
+                  time.
+                </p>
+              </div>
 
-                  <p className="mt-1 text-sm text-slate-500">
-                    Continue your preparation
-                  </p>
-                </div>
-
-                <div className="mt-6 space-y-3">
-                  <Link
-                    href="/dashboard/cv"
-                    className="group flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/50 p-4 transition hover:border-blue-500/40 hover:bg-slate-950"
-                  >
-                    <div>
-                      <p className="font-medium text-white">
-                        Analyze a CV
-                      </p>
-
-                      <p className="mt-1 text-xs text-slate-500">
-                        Get targeted AI feedback
-                      </p>
-                    </div>
-
-                    <ArrowUpRight
-                      size={19}
-                      className="text-slate-600 transition group-hover:text-blue-400"
-                    />
-                  </Link>
-
-                  <Link
-                    href="/dashboard/interview/new"
-                    className="group flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/50 p-4 transition hover:border-violet-500/40 hover:bg-slate-950"
-                  >
-                    <div>
-                      <p className="font-medium text-white">
-                        Start interview
-                      </p>
-
-                      <p className="mt-1 text-xs text-slate-500">
-                        Practice for a specific role
-                      </p>
-                    </div>
-
-                    <ArrowUpRight
-                      size={19}
-                      className="text-slate-600 transition group-hover:text-violet-400"
-                    />
-                  </Link>
-                </div>
-              </section>
-
-              <section className="relative overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-slate-900/70 to-violet-500/10 p-6">
-                <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-blue-500/10 blur-3xl" />
-
-                <div className="relative">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
-                    <Sparkles size={19} />
-                  </div>
-
-                  <p className="mt-5 text-sm font-medium text-blue-400">
-                    InterviewLab AI
-                  </p>
-
-                  <h3 className="mt-2 text-lg font-semibold">
-                    Turn feedback into practice
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-6 text-slate-400">
-                    Practice questions generated from your resume and prepare
-                    for realistic interview scenarios.
-                  </p>
-
-                  <Link
-                    href="/dashboard/interview/new"
-                    className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-400 transition hover:text-blue-300"
-                  >
-                    Start preparing
-                    <ArrowUpRight size={16} />
-                  </Link>
-                </div>
-              </section>
+              <Link
+                href="/dashboard/interview/new"
+                className="shrink-0 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold transition hover:bg-blue-500"
+              >
+                Practice now →
+              </Link>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </main>
