@@ -87,133 +87,140 @@ export default async function InterviewHistoryPage({
   );
 
   return (
-    <main className="min-h-screen text-white">
+    <main className="min-h-screen bg-[#dedfd8] text-[#202522]">
       <Sidebar />
 
-      <div className="px-5 py-6 sm:px-6 lg:ml-64 lg:px-8 lg:py-8">
-        <div className="mx-auto max-w-6xl">
+      <div className="px-5 py-7 sm:px-8 lg:ml-[248px] lg:px-10 lg:py-9">
+        <div className="mx-auto max-w-[1120px]">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[#59615c] transition hover:text-[#073f39]"
           >
-            <ArrowLeft size={17} />
+            <ArrowLeft size={16} />
             Back to dashboard
           </Link>
 
-          <section className="mt-8 rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
-            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <section className="mt-6 overflow-hidden rounded-[18px] border border-[#c7cbc6] bg-[#f4f4f0]">
+            <div className="flex flex-col gap-6 px-6 py-6 sm:px-8 md:flex-row md:items-center md:justify-between">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#d8e4de] text-[#125c52]">
                   <BriefcaseBusiness
-                    size={22}
+                    size={20}
                   />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#58746b]">
                     Completed interview
                   </p>
 
-                  <h1 className="mt-2 text-3xl font-bold">
+                  <h1 className="mt-1 text-[27px] font-semibold tracking-[-0.03em] text-[#202522]">
                     {session.position}
                   </h1>
 
                   {session.company && (
-                    <p className="mt-1 text-slate-400">
+                    <p className="mt-1 text-sm text-[#747b76]">
                       {session.company}
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <Clock3 size={17} />
+              <div className="flex items-center gap-2 rounded-full border border-[#d3d6d1] bg-[#e9ebe7] px-4 py-2 text-sm text-[#626963]">
+                <Clock3 size={15} />
                 {minutes} min
               </div>
             </div>
           </section>
 
-          <section className="mt-6 rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
-            <div className="flex items-center gap-3">
-              <MessageSquare
-                size={20}
-                className="text-violet-400"
-              />
+          <section className="mt-5 overflow-hidden rounded-[18px] border border-[#c7cbc6] bg-[#f4f4f0]">
+            <div className="flex items-center gap-3 border-b border-[#d8dad5] px-6 py-5 sm:px-8">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e5e7e2] text-[#5f6862]">
+                <MessageSquare
+                  size={17}
+                />
+              </div>
 
               <div>
-                <h2 className="text-xl font-semibold">
+                <h2 className="text-[18px] font-semibold text-[#202522]">
                   Interview transcript
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-xs text-[#7b827d]">
                   {turns.length} completed answers
                 </p>
               </div>
             </div>
 
-            <div className="mt-7 space-y-6">
+            <div>
               {turns.map((turn, index) => (
                 <div
                   key={`${turn.question}-${index}`}
-                  className="rounded-2xl border border-slate-800 bg-slate-950/50 p-6"
+                  className="border-b border-[#d8dad5] px-6 py-6 last:border-b-0 sm:px-8"
                 >
                   <div className="flex items-start justify-between gap-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-400">
-                      Question {index + 1}
-                    </p>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#5f776f]">
+                        Question {index + 1}
+                      </p>
 
-                    <span className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-300">
+                      <p className="mt-2 max-w-3xl text-[16px] font-medium leading-7 text-[#252a27]">
+                        {turn.question}
+                      </p>
+                    </div>
+
+                    <span className="shrink-0 rounded-full bg-[#dde8e3] px-3 py-1 text-xs font-semibold text-[#125c52]">
                       {turn.score}/100
                     </span>
                   </div>
 
-                  <p className="mt-3 font-medium leading-7 text-white">
-                    {turn.question}
-                  </p>
-
-                  <div className="mt-5 border-l-2 border-slate-700 pl-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                  <div className="mt-5 border-l-2 border-[#c4ccc7] pl-4">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#858b87]">
                       Your answer
                     </p>
 
-                    <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-300">
+                    <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-[#555c57]">
                       {turn.answer}
                     </p>
                   </div>
 
-                  <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <div className="mt-6 grid gap-6 md:grid-cols-2">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-400">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#397267]">
                         Strengths
                       </p>
 
-                      {turn.strengths.map(
-                        (item) => (
-                          <p
-                            key={item}
-                            className="mt-2 text-sm leading-5 text-slate-400"
-                          >
-                            • {item}
-                          </p>
-                        )
-                      )}
+                      <div className="mt-3 space-y-2">
+                        {turn.strengths.map(
+                          (item) => (
+                            <p
+                              key={item}
+                              className="text-sm leading-5 text-[#5b625d]"
+                            >
+                              • {item}
+                            </p>
+                          )
+                        )}
+                      </div>
                     </div>
 
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-400">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8a6d3b]">
                         Improve
                       </p>
 
-                      {turn.improvements.map(
-                        (item) => (
-                          <p
-                            key={item}
-                            className="mt-2 text-sm leading-5 text-slate-400"
-                          >
-                            • {item}
-                          </p>
-                        )
-                      )}
+                      <div className="mt-3 space-y-2">
+                        {turn.improvements.map(
+                          (item) => (
+                            <p
+                              key={item}
+                              className="text-sm leading-5 text-[#5f5a50]"
+                            >
+                              • {item}
+                            </p>
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -221,7 +228,7 @@ export default async function InterviewHistoryPage({
             </div>
           </section>
 
-          <div className="mt-6">
+          <div className="mt-5">
             <FinalInterviewReport
               report={report}
             />

@@ -12,7 +12,6 @@ import {
   Menu,
   MessageSquare,
   Settings,
-  Sparkles,
   X,
 } from "lucide-react";
 
@@ -91,13 +90,13 @@ export default function MobileNavigation() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-800/80 bg-slate-950/90 px-5 py-4 backdrop-blur-xl lg:hidden">
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-white/10 bg-[#073f39]/95 px-5 py-4 backdrop-blur-xl lg:hidden">
         <Link
           href="/dashboard"
           className="flex items-center gap-3"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-600">
-            <Sparkles size={18} />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-[#16806f] text-xs font-bold text-white">
+            IL
           </div>
 
           <span className="font-bold text-white">
@@ -108,7 +107,7 @@ export default function MobileNavigation() {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="rounded-xl border border-slate-800 bg-slate-900 p-2.5 text-slate-300"
+          className="rounded-xl border border-white/10 bg-white/[0.06] p-2.5 text-white/80"
           aria-label="Open navigation"
         >
           <Menu size={20} />
@@ -124,11 +123,11 @@ export default function MobileNavigation() {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
 
-          <aside className="absolute right-0 top-0 flex h-full w-[85%] max-w-sm flex-col border-l border-slate-800 bg-slate-950 p-5 shadow-2xl">
+          <aside className="absolute right-0 top-0 flex h-full w-[85%] max-w-sm flex-col border-l border-white/10 bg-[#073f39] p-5 shadow-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-600">
-                  <Sparkles size={19} />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-[#16806f] text-xs font-bold text-white">
+                  IL
                 </div>
 
                 <div>
@@ -136,8 +135,8 @@ export default function MobileNavigation() {
                     InterviewLab
                   </p>
 
-                  <p className="text-xs text-slate-500">
-                    AI Interview Coach
+                  <p className="text-xs text-white/45">
+                    Interview preparation
                   </p>
                 </div>
               </div>
@@ -145,7 +144,7 @@ export default function MobileNavigation() {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-xl p-2 text-slate-500 transition hover:bg-slate-900 hover:text-white"
+                className="rounded-xl p-2 text-white/45 transition hover:bg-white/[0.07] hover:text-white"
                 aria-label="Close navigation"
               >
                 <X size={20} />
@@ -164,15 +163,15 @@ export default function MobileNavigation() {
                     onClick={() => setOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
                       active
-                        ? "bg-blue-500/10 text-white"
-                        : "text-slate-400 hover:bg-slate-900 hover:text-white"
+                        ? "bg-[#176c60] text-white"
+                        : "text-white/70 hover:bg-white/[0.07] hover:text-white"
                     }`}
                   >
                     <Icon
                       size={19}
                       className={
                         active
-                          ? "text-blue-400"
+                          ? "text-white"
                           : ""
                       }
                     />
@@ -187,7 +186,7 @@ export default function MobileNavigation() {
               type="button"
               onClick={handleSignOut}
               disabled={isSigningOut}
-              className="flex items-center gap-3 rounded-xl border-t border-slate-800 px-4 py-4 text-sm font-medium text-slate-500 transition hover:text-red-400 disabled:opacity-50"
+              className="flex items-center gap-3 rounded-xl border-t border-white/10 px-4 py-4 text-sm font-medium text-white/45 transition hover:text-red-400 disabled:opacity-50"
             >
               <LogOut size={19} />
               {isSigningOut ? "Signing out..." : "Sign out"}

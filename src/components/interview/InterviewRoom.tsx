@@ -8,7 +8,6 @@ import {
   LoaderCircle,
   MessageSquare,
   Send,
-  Sparkles,
   Target,
 } from "lucide-react";
 
@@ -24,10 +23,13 @@ import type {
   InterviewTurnEvaluation,
 } from "@/src/types/interview";
 
+import type { InterviewStyle } from "@/src/types/interview-style";
+
 type Props = {
   position: string;
   company?: string;
   jobDescription?: string;
+  interviewStyle: InterviewStyle;
 
   resumeContext?: {
     overallScore: number;
@@ -52,6 +54,7 @@ export default function InterviewRoom({
   position,
   company,
   jobDescription,
+  interviewStyle,
   resumeContext,
   firstQuestion,
 }: Props) {
@@ -59,7 +62,8 @@ export default function InterviewRoom({
 
   const [answer, setAnswer] = useState("");
   const [seconds, setSeconds] = useState(0);
-  const [questionIndex, setQuestionIndex] = useState(1);
+  const [questionIndex, setQuestionIndex] =
+    useState(1);
 
   const [currentQuestion, setCurrentQuestion] =
     useState(firstQuestion);
@@ -116,6 +120,7 @@ export default function InterviewRoom({
       company,
       jobDescription,
       resumeContext,
+      interviewStyle,
       question: currentQuestion,
       answer,
       previousQuestions,
@@ -174,7 +179,10 @@ export default function InterviewRoom({
       });
 
       if (!saveResult.success) {
-        setError(saveResult.error);
+        setError(
+          saveResult.error ??
+            "Unable to save interview."
+        );
       }
 
       setFinalReport(result.report);
@@ -202,95 +210,96 @@ export default function InterviewRoom({
 
   if (finalReport) {
     return (
-      <FinalInterviewReport
-        report={finalReport}
-      />
+      <FinalInterviewReport report={finalReport} />
     );
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
-      <section className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60">
-        <div className="flex flex-col gap-5 border-b border-slate-800 px-5 py-5 sm:px-7 sm:py-6 sm:flex-row sm:items-center sm:justify-between">
+    <div className="grid gap-5 xl:grid-cols-[1fr_290px]">
+      <section className="overflow-hidden rounded-[18px] border border-[#d9ddd7] bg-[#f8f8f4]">
+        <div className="flex flex-col gap-5 border-b border-[#dfe2dc] px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 shadow-lg shadow-blue-500/20">
-              <Sparkles size={21} />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#dce9e3] text-[#125c52]">
+              <BriefcaseBusiness size={20} />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
-                Live interview
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#568078]">
+                Interview session
               </p>
 
-              <h1 className="mt-1 text-2xl font-bold text-white">
+              <h1 className="mt-1 text-[22px] font-semibold tracking-[-0.025em] text-[#202522]">
                 {position}
               </h1>
+
+              {company && (
+                <p className="mt-0.5 text-xs text-[#7a817c]">
+                  {company}
+                </p>
+              )}
             </div>
           </div>
 
-          <div className="flex items-center gap-2 rounded-full border border-slate-800 bg-slate-950/60 px-4 py-2 text-sm text-slate-400">
-            <Clock3 size={16} />
+          <div className="flex items-center gap-2 rounded-full border border-[#d6dcd6] bg-[#eef1ed] px-4 py-2 text-sm text-[#59635e]">
+            <Clock3 size={15} />
             {minutes}:{remainingSeconds}
           </div>
         </div>
 
-        <div className="px-5 py-6 sm:px-7 sm:py-8">
-          <div className="flex items-center justify-between gap-4">
+        <div className="px-6 py-7 sm:px-7">
+          <div className="flex items-end justify-between gap-5">
             <div>
-              <p className="text-sm font-medium text-slate-300">
+              <p className="text-sm font-semibold text-[#313733]">
                 Question {questionIndex} of{" "}
                 {totalQuestions}
               </p>
 
-              <p className="mt-1 text-xs text-slate-500">
-                Answer naturally and support your
-                points with examples.
+              <p className="mt-1 text-xs text-[#808681]">
+                Answer naturally and use specific examples.
               </p>
             </div>
 
-            <span className="text-sm font-semibold text-blue-400">
+            <span className="text-xs font-semibold text-[#125c52]">
               {Math.round(progress)}%
             </span>
           </div>
 
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-800">
+          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#dde2dd]">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-violet-500 transition-all duration-500"
+              className="h-full rounded-full bg-[#125c52] transition-all duration-500"
               style={{
                 width: `${progress}%`,
               }}
             />
           </div>
 
-          <div className="mt-10">
+          <div className="mt-8 rounded-[16px] bg-[#e6ede8] px-6 py-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
-                <MessageSquare size={19} />
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d2e3db] text-[#125c52]">
+                <MessageSquare size={16} />
               </div>
 
               <div>
-                <p className="font-semibold text-white">
-                  AI Recruiter
+                <p className="text-sm font-semibold text-[#202522]">
+                  Interviewer
                 </p>
 
-                <p className="text-xs text-emerald-400">
+                <p className="mt-0.5 text-[11px] text-[#568078]">
                   Interview in progress
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
-              <p className="text-lg leading-8 text-white sm:text-xl sm:leading-9">
-                {currentQuestion}
-              </p>
-            </div>
+            <p className="mt-5 text-[20px] font-medium leading-8 tracking-[-0.015em] text-[#252a27]">
+              {currentQuestion}
+            </p>
           </div>
 
           {!evaluation ? (
-            <div className="mt-8">
+            <div className="mt-7">
               <label
                 htmlFor="answer"
-                className="text-sm font-medium text-slate-300"
+                className="text-sm font-semibold text-[#343a36]"
               >
                 Your answer
               </label>
@@ -302,10 +311,10 @@ export default function InterviewRoom({
                   setAnswer(event.target.value)
                 }
                 placeholder="Write your answer as if you were speaking to the recruiter..."
-                className="mt-3 h-56 w-full resize-none rounded-2xl border border-slate-800 bg-slate-950/70 p-5 text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
+                className="mt-3 h-56 w-full resize-none rounded-[14px] border border-[#ccd6d0] bg-[#f1f4f0] p-5 text-[#202522] outline-none transition placeholder:text-[#9aa19c] focus:border-[#4b8b7e] focus:bg-white"
               />
 
-              <div className="mt-3 flex flex-col gap-2 text-xs text-slate-500 sm:flex-row sm:justify-between">
+              <div className="mt-3 flex flex-col gap-2 text-xs text-[#858b87] sm:flex-row sm:justify-between">
                 <span>
                   {answer.length} characters
                 </span>
@@ -316,7 +325,7 @@ export default function InterviewRoom({
               </div>
 
               {error && (
-                <div className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
+                <div className="mt-4 rounded-xl border border-[#dfbcb4] bg-[#f5e3df] p-4 text-sm text-[#944f41]">
                   {error}
                 </div>
               )}
@@ -329,7 +338,7 @@ export default function InterviewRoom({
                     !answer.trim() ||
                     isEvaluating
                   }
-                  className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500"
+                  className="flex items-center gap-2 rounded-lg bg-[#125c52] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0e4d45] disabled:cursor-not-allowed disabled:bg-[#ccd4cf] disabled:text-[#8b938e]"
                 >
                   {isEvaluating ? (
                     <>
@@ -342,47 +351,47 @@ export default function InterviewRoom({
                   ) : (
                     <>
                       Submit answer
-                      <Send size={17} />
+                      <Send size={16} />
                     </>
                   )}
                 </button>
               </div>
             </div>
           ) : (
-            <div className="mt-8 space-y-5">
-              <div className="rounded-2xl border border-violet-500/20 bg-violet-500/5 p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-400">
-                  Recruiter
+            <div className="mt-7 space-y-5">
+              <section className="rounded-[14px] border border-[#d7ddd7] bg-[#edf1ed] p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6c766f]">
+                  Interviewer response
                 </p>
 
-                <p className="mt-3 leading-7 text-slate-200">
+                <p className="mt-3 text-sm leading-7 text-[#48504b]">
                   {evaluation.recruiterReaction}
                 </p>
-              </div>
+              </section>
 
-              <div className="grid gap-4 md:grid-cols-[140px_1fr]">
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/50 p-5 text-center">
-                  <p className="text-xs text-slate-500">
+              <div className="grid gap-4 md:grid-cols-[135px_1fr]">
+                <div className="rounded-[14px] border border-[#d3ddd7] bg-[#e6ede8] p-5 text-center">
+                  <p className="text-[11px] font-medium text-[#6d766f]">
                     Answer score
                   </p>
 
-                  <p className="mt-2 text-4xl font-bold text-white">
+                  <p className="mt-3 text-[42px] font-semibold leading-none tracking-[-0.04em] text-[#125c52]">
                     {evaluation.score}
                   </p>
 
-                  <p className="text-xs text-slate-600">
+                  <p className="mt-1 text-[11px] text-[#89908b]">
                     /100
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/50 p-5">
-                  <p className="text-sm font-semibold text-white">
+                <div className="rounded-[14px] border border-[#deddd6] bg-[#f1eee6] p-5">
+                  <p className="text-sm font-semibold text-[#343730]">
                     Quick feedback
                   </p>
 
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div className="mt-4 grid gap-5 sm:grid-cols-2">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-400">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.11em] text-[#39725f]">
                         What worked
                       </p>
 
@@ -391,7 +400,7 @@ export default function InterviewRoom({
                         .map((item) => (
                           <p
                             key={item}
-                            className="mt-2 text-sm text-slate-400"
+                            className="mt-2 text-sm leading-5 text-[#60665f]"
                           >
                             • {item}
                           </p>
@@ -399,7 +408,7 @@ export default function InterviewRoom({
                     </div>
 
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-400">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.11em] text-[#9a712c]">
                         Improve
                       </p>
 
@@ -408,7 +417,7 @@ export default function InterviewRoom({
                         .map((item) => (
                           <p
                             key={item}
-                            className="mt-2 text-sm text-slate-400"
+                            className="mt-2 text-sm leading-5 text-[#666258]"
                           >
                             • {item}
                           </p>
@@ -419,7 +428,7 @@ export default function InterviewRoom({
               </div>
 
               {error && (
-                <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
+                <div className="rounded-xl border border-[#dfbcb4] bg-[#f5e3df] p-4 text-sm text-[#944f41]">
                   {error}
                 </div>
               )}
@@ -429,7 +438,7 @@ export default function InterviewRoom({
                   type="button"
                   onClick={handleContinue}
                   disabled={isGeneratingReport}
-                  className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:bg-slate-800"
+                  className="flex items-center gap-2 rounded-lg bg-[#125c52] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0e4d45] disabled:bg-[#ccd4cf]"
                 >
                   {isGeneratingReport ? (
                     <>
@@ -452,62 +461,54 @@ export default function InterviewRoom({
         </div>
       </section>
 
-      <aside className="space-y-6">
-        <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
+      <aside className="space-y-5">
+        <section className="rounded-[16px] border border-[#d7ddd7] bg-[#e7ece8] p-5">
           <div className="flex items-center gap-3">
             <BriefcaseBusiness
-              size={19}
-              className="text-blue-400"
+              size={18}
+              className="text-[#125c52]"
             />
 
             <div>
-              <p className="text-xs text-slate-500">
+              <p className="text-[11px] text-[#78807b]">
                 Interview for
               </p>
 
-              <p className="font-semibold text-white">
+              <p className="mt-0.5 text-sm font-semibold text-[#202522]">
                 {position}
               </p>
 
               {company && (
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-0.5 text-xs text-[#7b837e]">
                   {company}
                 </p>
               )}
             </div>
           </div>
 
-          <div className="mt-6 border-t border-slate-800 pt-6">
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-500">
-                Progress
-              </span>
+          <div className="mt-5 border-t border-[#d2d9d4] pt-5">
+            <InfoRow
+              label="Progress"
+              value={`${questionIndex}/${totalQuestions}`}
+            />
 
-              <span className="text-slate-300">
-                {questionIndex}/{totalQuestions}
-              </span>
-            </div>
-
-            <div className="mt-3 flex justify-between text-sm">
-              <span className="text-slate-500">
-                Answers completed
-              </span>
-
-              <span className="text-slate-300">
-                {turns.length}
-              </span>
+            <div className="mt-3">
+              <InfoRow
+                label="Answers completed"
+                value={String(turns.length)}
+              />
             </div>
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
+        <section className="rounded-[16px] border border-[#e0d9ca] bg-[#eee9df] p-5">
           <div className="flex items-center gap-2">
             <Target
-              size={18}
-              className="text-amber-400"
+              size={17}
+              className="text-[#9b722d]"
             />
 
-            <h2 className="font-semibold text-white">
+            <h2 className="text-sm font-semibold text-[#39362f]">
               Answer goals
             </h2>
           </div>
@@ -524,16 +525,36 @@ export default function InterviewRoom({
   );
 }
 
+function InfoRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex justify-between text-sm">
+      <span className="text-[#79817c]">
+        {label}
+      </span>
+
+      <span className="font-medium text-[#343a36]">
+        {value}
+      </span>
+    </div>
+  );
+}
+
 function Goal({
   text,
 }: {
   text: string;
 }) {
   return (
-    <div className="flex items-center gap-3 text-sm text-slate-400">
+    <div className="flex items-center gap-3 text-sm text-[#66645c]">
       <CheckCircle2
-        size={17}
-        className="shrink-0 text-emerald-400"
+        size={16}
+        className="shrink-0 text-[#54816b]"
       />
 
       {text}

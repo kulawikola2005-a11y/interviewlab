@@ -4,7 +4,6 @@ import {
   Check,
   FileText,
   MessageSquare,
-  Sparkles,
 } from "lucide-react";
 
 type Props = {
@@ -42,17 +41,17 @@ export default function OnboardingCard({
       icon: FileText,
     },
     {
-      title: "Review AI feedback",
+      title: "Review your feedback",
       description:
         "See your score, strengths, weaknesses and recommendations.",
       completed: hasResume,
       href: "/dashboard/cv",
-      icon: Sparkles,
+      icon: FileText,
     },
     {
       title: "Practice an interview",
       description:
-        "Start an AI mock interview tailored to your target role.",
+        "Start an mock interview tailored to your target role.",
       completed: hasInterview,
       href: "/dashboard/interview/new",
       icon: MessageSquare,
@@ -60,7 +59,7 @@ export default function OnboardingCard({
   ];
 
   return (
-    <section className="mt-8 overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-slate-900/70 to-violet-500/10 p-7">
+    <section className="mt-8 overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
@@ -84,7 +83,7 @@ export default function OnboardingCard({
 
           <div className="mt-2 h-2 w-44 overflow-hidden rounded-full bg-slate-800">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-violet-500 transition-all duration-500"
+              className="h-full rounded-full bg-blue-500 transition-all duration-500"
               style={{
                 width: `${progress}%`,
               }}

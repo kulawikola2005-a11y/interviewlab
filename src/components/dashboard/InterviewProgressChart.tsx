@@ -66,10 +66,10 @@ export default function InterviewProgressChart({
           <Line
             type="monotone"
             dataKey="score"
-            stroke="#3b82f6"
+            stroke="#17685d"
             strokeWidth={3}
             dot={{
-              fill: "#3b82f6",
+              fill: "#17685d",
               strokeWidth: 0,
               r: 4,
             }}

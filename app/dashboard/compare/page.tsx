@@ -8,28 +8,28 @@ export default async function ComparePage() {
   const resumes = await getResumeComparisons();
 
   return (
-    <main className="min-h-screen text-white">
+    <main className="min-h-screen bg-[#f1f1ec] text-[#202522]">
       <Sidebar />
 
-      <div className="px-5 py-6 sm:px-6 lg:ml-64 lg:px-8 lg:py-8">
-        <div className="mx-auto max-w-6xl">
+      <div className="px-5 py-7 sm:px-8 lg:ml-[248px] lg:px-10 lg:py-9">
+        <div className="mx-auto max-w-[1180px]">
           <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
-              <GitCompareArrows size={23} />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#d7ddda] text-[#315c56]">
+              <GitCompareArrows size={20} />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-400">
-                CV Comparison
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#56736c]">
+                CV comparison
               </p>
 
-              <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                See how your CV improved
+              <h1 className="mt-2 text-[30px] font-semibold tracking-[-0.035em] text-[#202522]">
+                See how your CV changed
               </h1>
 
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base">
-                Compare two resume analyses and see exactly how your overall
-                score and individual metrics changed.
+              <p className="mt-3 max-w-2xl text-[15px] leading-6 text-[#6d7470]">
+                Compare two resume analyses and see how the overall score and
+                individual areas changed.
               </p>
             </div>
           </div>

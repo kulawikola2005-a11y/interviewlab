@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import {
-  CheckCircle2,
   FileText,
   LoaderCircle,
   Upload,
@@ -127,12 +126,12 @@ export default function ResumeUpload() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-        <h2 className="text-xl font-semibold text-white">
+      <div className="rounded-2xl border border-[#C7D6CF] bg-[#DCE7E1] p-6">
+        <h2 className="text-xl font-semibold text-[#202522]">
           Upload your CV
         </h2>
 
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="mt-2 text-sm text-[#69716C]">
           Upload a PDF and optionally paste a job description for a more targeted analysis.
         </p>
 
@@ -151,17 +150,17 @@ export default function ResumeUpload() {
             onClick={() => inputRef.current?.click()}
             className={`mt-6 flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed p-12 text-center transition ${
               isDragging
-                ? "border-blue-500 bg-blue-500/10"
-                : "border-slate-700 bg-slate-950/40 hover:border-slate-600"
+                ? "border-[#2f7a6f] bg-[#e8f1ed]"
+                : "border-[#aebeb7] bg-[#f3f5f2] hover:border-[#6f8f86] hover:bg-[#eef2ef]"
             }`}
           >
-            <Upload size={28} className="text-blue-400" />
+            <Upload size={28} className="text-[#176B61]" />
 
-            <p className="mt-4 font-medium text-white">
+            <p className="mt-4 font-medium text-[#202522]">
               Drop your CV here
             </p>
 
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-[#7E8781]">
               or click to browse
             </p>
 
@@ -176,16 +175,16 @@ export default function ResumeUpload() {
             />
           </div>
         ) : (
-          <div className="mt-6 flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+          <div className="mt-6 flex items-center justify-between rounded-xl border border-[#C7D6CF] bg-[#F5F7F4] p-4">
             <div className="flex items-center gap-3">
-              <FileText className="text-blue-400" />
+              <FileText className="text-[#176B61]" />
 
               <div>
-                <p className="font-medium text-white">
+                <p className="font-medium text-[#202522]">
                   {file.name}
                 </p>
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-[#7E8781]">
                   {(file.size / 1024 / 1024).toFixed(2)} MB
                 </p>
               </div>
@@ -194,7 +193,7 @@ export default function ResumeUpload() {
             <button
               type="button"
               onClick={removeFile}
-              className="rounded-lg p-2 text-slate-500 hover:bg-slate-800 hover:text-white"
+              className="rounded-lg p-2 text-[#7E8781] hover:bg-slate-800 hover:text-[#202522]"
             >
               <X size={18} />
             </button>
@@ -202,7 +201,7 @@ export default function ResumeUpload() {
         )}
 
         <div className="mt-6">
-          <label className="mb-2 block text-sm font-medium text-slate-300">
+          <label className="mb-2 block text-sm font-medium text-[#4F5752]">
             Job description
           </label>
 
@@ -213,7 +212,7 @@ export default function ResumeUpload() {
             }
             rows={7}
             placeholder="Paste the job description here..."
-            className="w-full resize-none rounded-xl border border-slate-700 bg-slate-950 p-4 text-sm text-white outline-none transition focus:border-blue-500"
+            className="w-full resize-none rounded-xl border border-[#B9CCC3] bg-[#F5F7F4] p-4 text-sm text-[#202522] outline-none transition placeholder:text-[#9AA39D] focus:border-[#176B61]"
           />
         </div>
 
@@ -227,7 +226,7 @@ export default function ResumeUpload() {
           type="button"
           onClick={handleAnalyze}
           disabled={!file || isLoading}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#125C52] px-5 py-3 font-semibold text-[#202522] transition hover:bg-[#0E4D45] disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-[#7E8781]"
         >
           {isLoading && (
             <LoaderCircle

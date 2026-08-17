@@ -33,7 +33,7 @@ export default function InterviewHistory({
           </h2>
 
           <p className="mt-1 text-sm text-slate-500">
-            Your latest AI interview sessions
+            Your latest interview sessions
           </p>
         </div>
 

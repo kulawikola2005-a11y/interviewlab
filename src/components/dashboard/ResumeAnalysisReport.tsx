@@ -4,13 +4,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   AlertTriangle,
+  AlignLeft,
   ArrowRight,
-  Bot,
   CheckCircle2,
   FileSearch,
   Lightbulb,
   MessageSquare,
-  Sparkles,
   Target,
   Trophy,
 } from "lucide-react";
@@ -24,8 +23,11 @@ type ResumeAnalysisReportProps = {
 export default function ResumeAnalysisReport({
   analysis,
 }: ResumeAnalysisReportProps) {
-  const [showAllImprovements, setShowAllImprovements] = useState(false);
-  const [showAllQuestions, setShowAllQuestions] = useState(false);
+  const [showAllImprovements, setShowAllImprovements] =
+    useState(false);
+
+  const [showAllQuestions, setShowAllQuestions] =
+    useState(false);
 
   const score = clampScore(analysis.overallScore);
 
@@ -64,19 +66,19 @@ export default function ResumeAnalysisReport({
       icon: Target,
     },
     {
-      label: "Experience relevance",
+      label: "Experience",
       value: clampScore(safeMetrics.experienceRelevance),
       icon: Trophy,
     },
     {
       label: "Impact",
       value: clampScore(safeMetrics.impact),
-      icon: Sparkles,
+      icon: Target,
     },
     {
       label: "Formatting",
       value: clampScore(safeMetrics.formatting),
-      icon: Bot,
+      icon: AlignLeft,
     },
   ];
 
@@ -87,103 +89,99 @@ export default function ResumeAnalysisReport({
   const topPriority = lowestMetrics[0];
 
   return (
-    <div className="space-y-6">
-      <section className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60">
-        <div className="grid gap-5 sm:p-5 sm:p-7 lg:p-8 p-5 sm:p-5 sm:p-7 lg:p-8 lg:grid-cols-[220px_1fr] lg:items-center">
-          <div className="flex justify-center">
-            <div
-              className="relative flex h-44 w-44 items-center justify-center rounded-full"
-              style={{
-                background: `conic-gradient(#3b82f6 ${score * 3.6}deg, #1e293b 0deg)`,
-              }}
-            >
-              <div className="absolute inset-[10px] rounded-full bg-slate-950" />
+    <div className="mt-7 space-y-5">
+      {/* MAIN SCORE */}
 
-              <div className="relative text-center">
-                <p className="text-4xl sm:text-5xl font-bold text-white">
-                  {score}
-                </p>
+      <section className="overflow-hidden rounded-[18px] border border-[#d5ddd7] bg-[#e5ece8]">
+        <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[180px_1fr] lg:items-center">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#577068]">
+              Overall score
+            </p>
 
-                <p className="mt-1 text-sm text-slate-500">
-                  out of 100
-                </p>
-              </div>
+            <div className="mt-3 flex items-end gap-2">
+              <span className="text-[64px] font-semibold leading-none tracking-[-0.06em] text-[#125c52]">
+                {score}
+              </span>
+
+              <span className="mb-2 text-sm text-[#7a817c]">
+                /100
+              </span>
+            </div>
+
+            <div className="mt-4">
+              <ScoreBadge score={score} />
             </div>
           </div>
 
-          <div>
-            <div className="flex items-center gap-2 text-blue-400">
-              <Sparkles size={18} />
+          <div className="border-t border-[#ced8d2] pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+            <p className="text-sm font-semibold text-[#125c52]">
+              Resume review
+            </p>
 
-              <p className="text-sm font-semibold uppercase tracking-[0.18em]">
-                AI Resume Analysis
-              </p>
-            </div>
-
-            <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-white">
+            <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.03em] text-[#202522]">
               {getScoreLabel(score)}
             </h2>
 
-            <p className="mt-4 max-w-3xl leading-7 text-slate-300">
+            <p className="mt-3 max-w-3xl text-[15px] leading-7 text-[#5f6863]">
               {analysis.summary}
             </p>
           </div>
         </div>
       </section>
 
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
+      {/* METRICS */}
+
+      <section className="rounded-[16px] border border-[#dedfd9] bg-[#f8f8f4] px-6 py-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#777e79]">
             Score breakdown
           </p>
 
-          <h3 className="mt-2 text-xl font-semibold text-white">
-            Resume performance
+          <h3 className="mt-2 text-[18px] font-semibold text-[#202522]">
+            Where your resume stands
           </h3>
-
-          <p className="mt-2 text-sm text-slate-500">
-            A closer look at the areas that contribute to your overall score.
-          </p>
         </div>
 
-        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <div className="mt-6 divide-y divide-[#e0e2dd] border-y border-[#e0e2dd]">
           {metrics.map((metric) => {
             const Icon = metric.icon;
+            const status = getMetricStatus(metric.value);
 
             return (
               <div
                 key={metric.label}
-                className="rounded-2xl border border-slate-800 bg-slate-950/50 p-5"
+                className="grid gap-3 py-4 sm:grid-cols-[220px_1fr_70px] sm:items-center"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
-                    <Icon size={18} />
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e5ebe7] text-[#467068]">
+                    <Icon size={15} />
                   </div>
 
-                  <span className="text-xl font-bold text-white">
-                    {metric.value}
-                  </span>
+                  <p className="text-sm font-medium text-[#343a36]">
+                    {metric.label}
+                  </p>
                 </div>
 
-                <p className="mt-4 text-sm font-medium text-slate-300">
-                  {metric.label}
-                </p>
-
-                <div className="mt-2">
-                  <span
-                    className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getMetricStatus(metric.value).className}`}
-                  >
-                    {getMetricStatus(metric.value).label}
-                  </span>
-                </div>
-
-                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                <div className="h-2 overflow-hidden rounded-full bg-[#e2e5e0]">
                   <div
-                    className={`h-full rounded-full transition-all duration-500 ${getMetricStatus(metric.value).barClassName}`}
+                    className={status.barClassName}
                     style={{
                       width: `${metric.value}%`,
                     }}
                   />
+                </div>
+
+                <div className="flex items-center justify-between gap-2 sm:justify-end">
+                  <span className="text-sm font-semibold tabular-nums text-[#202522]">
+                    {metric.value}
+                  </span>
+
+                  <span
+                    className={`rounded-full px-2 py-1 text-[10px] font-medium ${status.className}`}
+                  >
+                    {status.label}
+                  </span>
                 </div>
               </div>
             );
@@ -191,51 +189,41 @@ export default function ResumeAnalysisReport({
         </div>
       </section>
 
+      {/* PRIORITY */}
+
       {topPriority && (
-        <section className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-5 sm:p-7">
+        <section className="rounded-[16px] border border-[#e1d8c5] bg-[#f1eadc] p-6">
           <div className="flex items-start gap-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
-              <Target size={21} />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e8dcc2] text-[#966c24]">
+              <Target size={19} />
             </div>
 
-            <div className="flex-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-400">
-                Top priority
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#8a6d3b]">
+                Focus first
               </p>
 
-              <div className="mt-3 flex flex-wrap items-center gap-3">
-                <h3 className="text-xl font-semibold text-white">
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <h3 className="text-[19px] font-semibold text-[#302d27]">
                   {topPriority.label}
                 </h3>
 
-                <span className="rounded-full bg-amber-500/10 px-3 py-1 text-sm font-semibold text-amber-300">
+                <span className="rounded-full bg-[#e5d4af] px-2.5 py-1 text-xs font-semibold text-[#815c1d]">
                   {topPriority.value}/100
                 </span>
               </div>
 
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                This is currently the lowest-scoring part of your resume.
-                Improving it is likely to have the biggest impact on your next
-                analysis.
+              <p className="mt-3 max-w-3xl text-sm leading-6 text-[#6f675a]">
+                {getPriorityAdvice(topPriority.label)}
               </p>
 
-              <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/50 p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Recommended next action
-                </p>
-
-                <p className="mt-2 text-sm leading-6 text-slate-300">
-                  {getPriorityAdvice(topPriority.label)}
-                </p>
-              </div>
-
               {lowestMetrics[1] && (
-                <p className="mt-4 text-xs text-slate-500">
-                  Secondary priority:{" "}
-                  <span className="font-medium text-slate-300">
+                <p className="mt-4 text-xs text-[#8c8270]">
+                  Next priority:{" "}
+                  <span className="font-semibold">
                     {lowestMetrics[1].label}
                   </span>{" "}
-                  ({lowestMetrics[1].value}/100)
+                  · {lowestMetrics[1].value}/100
                 </p>
               )}
             </div>
@@ -243,57 +231,61 @@ export default function ResumeAnalysisReport({
         </section>
       )}
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      {/* STRENGTHS / WEAKNESSES */}
+
+      <div className="grid gap-5 xl:grid-cols-2">
         <ReportSection
           title="Strengths"
-          description="What already works well in your CV."
-          icon={<CheckCircle2 size={20} />}
+          description="What already works well."
+          tone="positive"
+          icon={<CheckCircle2 size={19} />}
           items={analysis.strengths}
         />
 
         <ReportSection
-          title="Weaknesses"
-          description="Areas that may reduce your chances with recruiters."
-          icon={<AlertTriangle size={20} />}
+          title="Needs attention"
+          description="What may reduce your chances."
+          tone="warning"
+          icon={<AlertTriangle size={19} />}
           items={analysis.weaknesses}
         />
       </div>
 
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
+      {/* IMPROVEMENTS */}
+
+      <section className="rounded-[16px] border border-[#dedfd9] bg-[#f8f8f4] p-6">
         <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
-            <Lightbulb size={21} />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e7e6dc] text-[#696b55]">
+            <Lightbulb size={19} />
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold text-white">
+            <h3 className="text-[18px] font-semibold text-[#202522]">
               Recommended improvements
             </h3>
 
-            <p className="mt-1 text-sm text-slate-500">
-              Practical changes that could strengthen your next CV version.
+            <p className="mt-1 text-sm text-[#777e79]">
+              Practical changes for your next version.
             </p>
           </div>
         </div>
 
-        <div className="mt-6 grid gap-3 md:grid-cols-2">
+        <div className="mt-6 divide-y divide-[#e2e3de] border-y border-[#e2e3de]">
           {(showAllImprovements
             ? analysis.improvements
             : analysis.improvements.slice(0, 5)
           ).map((item, index) => (
             <div
               key={`${item}-${index}`}
-              className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4"
+              className="grid grid-cols-[30px_1fr] gap-3 py-4"
             >
-              <div className="flex gap-3">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-xs font-bold text-amber-400">
-                  {index + 1}
-                </div>
+              <span className="pt-0.5 text-xs font-semibold tabular-nums text-[#8a908b]">
+                {String(index + 1).padStart(2, "0")}
+              </span>
 
-                <p className="text-sm leading-6 text-slate-300">
-                  {item}
-                </p>
-              </div>
+              <p className="text-sm leading-6 text-[#4e5551]">
+                {item}
+              </p>
             </div>
           ))}
         </div>
@@ -301,8 +293,10 @@ export default function ResumeAnalysisReport({
         {analysis.improvements.length > 5 && (
           <button
             type="button"
-            onClick={() => setShowAllImprovements((current) => !current)}
-            className="mt-5 text-sm font-semibold text-blue-400 transition hover:text-blue-300"
+            onClick={() =>
+              setShowAllImprovements((current) => !current)
+            }
+            className="mt-5 text-sm font-semibold text-[#125c52]"
           >
             {showAllImprovements
               ? "Show fewer recommendations"
@@ -311,37 +305,39 @@ export default function ResumeAnalysisReport({
         )}
       </section>
 
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400">
-            <MessageSquare size={21} />
+      {/* QUESTIONS */}
+
+      <section className="overflow-hidden rounded-[16px] border border-[#d9ddd7] bg-[#e7ece8]">
+        <div className="flex items-start gap-4 px-6 py-5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#d3e3dc] text-[#125c52]">
+            <MessageSquare size={19} />
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold text-white">
-              Potential interview questions
+            <h3 className="text-[18px] font-semibold text-[#202522]">
+              Questions to practice
             </h3>
 
-            <p className="mt-1 text-sm text-slate-500">
-              Questions a recruiter may ask based on this CV.
+            <p className="mt-1 text-sm text-[#737972]">
+              Questions a recruiter may ask based on this resume.
             </p>
           </div>
         </div>
 
-        <div className="mt-6 space-y-3">
+        <div className="border-t border-[#d3dad5] bg-[#f7f8f4]">
           {(showAllQuestions
             ? analysis.interviewQuestions
             : analysis.interviewQuestions.slice(0, 5)
           ).map((question, index) => (
             <div
               key={`${question}-${index}`}
-              className="flex gap-4 rounded-2xl border border-slate-800 bg-slate-950/50 p-5"
+              className="grid grid-cols-[35px_1fr] gap-3 border-b border-[#e0e2dd] px-6 py-4 last:border-b-0"
             >
-              <span className="font-semibold text-blue-400">
+              <span className="text-xs font-semibold text-[#397268]">
                 {String(index + 1).padStart(2, "0")}
               </span>
 
-              <p className="text-sm leading-6 text-slate-300">
+              <p className="text-sm leading-6 text-[#454c48]">
                 {question}
               </p>
             </div>
@@ -349,77 +345,95 @@ export default function ResumeAnalysisReport({
         </div>
 
         {analysis.interviewQuestions.length > 5 && (
-          <button
-            type="button"
-            onClick={() => setShowAllQuestions((current) => !current)}
-            className="mt-5 text-sm font-semibold text-blue-400 transition hover:text-blue-300"
-          >
-            {showAllQuestions
-              ? "Show fewer questions"
-              : `Show all ${analysis.interviewQuestions.length} questions`}
-          </button>
+          <div className="border-t border-[#d3dad5] px-6 py-4">
+            <button
+              type="button"
+              onClick={() =>
+                setShowAllQuestions((current) => !current)
+              }
+              className="text-sm font-semibold text-[#125c52]"
+            >
+              {showAllQuestions
+                ? "Show fewer questions"
+                : `Show all ${analysis.interviewQuestions.length} questions`}
+            </button>
+          </div>
         )}
       </section>
 
-      <section className="rounded-3xl border border-blue-500/20 bg-blue-500/5 p-5 sm:p-7">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h3 className="text-xl font-semibold text-white">
-              Ready to practice?
-            </h3>
+      {/* CTA */}
 
-            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-400">
-              Turn these recommendations into practice with a personalized mock
-              interview.
-            </p>
-          </div>
+      <section className="flex flex-col gap-6 rounded-[18px] bg-[#125c52] px-7 py-7 text-white md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
+            Next step
+          </p>
 
-          <Link
-            href="/dashboard/interview/new?fromResume=true"
-            className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
-          >
-            Start mock interview
-            <ArrowRight size={17} />
-          </Link>
+          <h3 className="mt-2 text-[21px] font-semibold">
+            Practice the questions that matter.
+          </h3>
+
+          <p className="mt-2 max-w-xl text-sm leading-6 text-white/65">
+            Start an interview using the context from this resume review.
+          </p>
         </div>
+
+        <Link
+          href="/dashboard/interview/new?fromResume=true"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#f7f7f2] px-5 py-3 text-sm font-semibold text-[#125c52] transition hover:bg-white"
+        >
+          Start interview
+          <ArrowRight size={15} />
+        </Link>
       </section>
     </div>
   );
 }
 
 function clampScore(value: number) {
-  return Math.max(0, Math.min(100, Math.round(value)));
+  return Math.max(
+    0,
+    Math.min(100, Math.round(value))
+  );
 }
 
 function getMetricStatus(score: number) {
   if (score >= 80) {
     return {
       label: "Strong",
-      className: "bg-emerald-500/10 text-emerald-400",
-      barClassName: "bg-emerald-500",
+      className:
+        "bg-[#d8eadf] text-[#286345]",
+      barClassName:
+        "h-full rounded-full bg-[#398163]",
     };
   }
 
   if (score >= 60) {
     return {
       label: "Good",
-      className: "bg-blue-500/10 text-blue-400",
-      barClassName: "bg-blue-500",
+      className:
+        "bg-[#dceae6] text-[#326b61]",
+      barClassName:
+        "h-full rounded-full bg-[#4b8b7e]",
     };
   }
 
   if (score >= 40) {
     return {
       label: "Needs work",
-      className: "bg-amber-500/10 text-amber-400",
-      barClassName: "bg-amber-500",
+      className:
+        "bg-[#f0dfbd] text-[#8b641f]",
+      barClassName:
+        "h-full rounded-full bg-[#c4933e]",
     };
   }
 
   return {
     label: "Critical",
-    className: "bg-red-500/10 text-red-400",
-    barClassName: "bg-red-500",
+    className:
+      "bg-[#efd6d0] text-[#985243]",
+    barClassName:
+      "h-full rounded-full bg-[#b66757]",
   };
 }
 
@@ -431,7 +445,7 @@ function getPriorityAdvice(metric: string) {
     "Skills match":
       "Make the skills most relevant to the target role easier to find and support them with examples from projects, work, education or volunteering.",
 
-    "Experience relevance":
+    Experience:
       "Reframe your existing experience around responsibilities that transfer to the target position. Include relevant volunteering, projects, internships and informal experience.",
 
     Impact:
@@ -456,30 +470,62 @@ function getScoreLabel(score: number) {
   return "Major improvements needed";
 }
 
+function ScoreBadge({
+  score,
+}: {
+  score: number;
+}) {
+  const status = getMetricStatus(score);
+
+  return (
+    <span
+      className={`inline-flex rounded-full px-3 py-1.5 text-xs font-semibold ${status.className}`}
+    >
+      {status.label}
+    </span>
+  );
+}
+
 function ReportSection({
   title,
   description,
   icon,
   items,
+  tone,
 }: {
   title: string;
   description: string;
   icon: React.ReactNode;
   items: string[];
+  tone: "positive" | "warning";
 }) {
+  const positive = tone === "positive";
+
   return (
-    <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7">
+    <section
+      className={`rounded-[16px] border p-6 ${
+        positive
+          ? "border-[#d5ded8] bg-[#e8eee9]"
+          : "border-[#e1d9cc] bg-[#eee9df]"
+      }`}
+    >
       <div className="flex items-start gap-4">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+        <div
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+            positive
+              ? "bg-[#d3e4dc] text-[#286b5c]"
+              : "bg-[#e7dcc6] text-[#936d2e]"
+          }`}
+        >
           {icon}
         </div>
 
         <div>
-          <h3 className="text-xl font-semibold text-white">
+          <h3 className="text-[18px] font-semibold text-[#202522]">
             {title}
           </h3>
 
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-[#747a76]">
             {description}
           </p>
         </div>
@@ -489,9 +535,17 @@ function ReportSection({
         {items.map((item, index) => (
           <div
             key={`${item}-${index}`}
-            className="rounded-xl border border-slate-800 bg-slate-950/50 p-4"
+            className="flex gap-3"
           >
-            <p className="text-sm leading-6 text-slate-300">
+            <span
+              className={`mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full ${
+                positive
+                  ? "bg-[#4d8d73]"
+                  : "bg-[#bd8d3d]"
+              }`}
+            />
+
+            <p className="text-sm leading-6 text-[#4f5652]">
               {item}
             </p>
           </div>

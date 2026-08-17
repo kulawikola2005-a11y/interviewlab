@@ -102,9 +102,7 @@ export async function processResume(
     return {
       success: false,
       error:
-        error instanceof Error
-          ? error.message
-          : "Unable to analyze this CV.",
+        "Unable to analyze this CV. Please check the PDF and try again.",
     };
   }
 }

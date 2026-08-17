@@ -1,90 +1,104 @@
 "use client";
 
 import {
-  LineChart,
+  CartesianGrid,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
 } from "recharts";
 
-const data = [
-  { session: "1", score: 62 },
-  { session: "2", score: 68 },
-  { session: "3", score: 66 },
-  { session: "4", score: 73 },
-  { session: "5", score: 78 },
-  { session: "6", score: 82 },
-  { session: "7", score: 84 },
-];
+type Point = {
+  label: string;
+  score: number;
+};
 
-export default function ProgressChart() {
+export default function ProgressChart({
+  data,
+}: {
+  data: Point[];
+}) {
+  if (data.length === 0) {
+    return (
+      <div className="flex h-64 items-center justify-center text-sm text-[#667176]">
+        Complete an interview to start tracking progress.
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
-      <div>
-        <h2 className="text-xl font-semibold text-white">
-          Interview progress
-        </h2>
+    <div className="h-64">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={data}
+          margin={{
+            top: 10,
+            right: 10,
+            left: -18,
+            bottom: 0,
+          }}
+        >
+          <CartesianGrid
+            stroke="#eef1f5"
+            vertical={false}
+          />
 
-        <p className="mt-1 text-sm text-slate-500">
-          Your overall score across recent practice sessions
-        </p>
-      </div>
+          <XAxis
+            dataKey="label"
+            tickLine={false}
+            axisLine={false}
+            tick={{
+              fill: "#94a3b8",
+              fontSize: 11,
+            }}
+          />
 
-      <div className="mt-6 h-72">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="#1e293b"
-              vertical={false}
-            />
+          <YAxis
+            domain={[0, 100]}
+            tickLine={false}
+            axisLine={false}
+            tick={{
+              fill: "#94a3b8",
+              fontSize: 11,
+            }}
+          />
 
-            <XAxis
-              dataKey="session"
-              stroke="#64748b"
-              tickLine={false}
-              axisLine={false}
-            />
+          <Tooltip
+            cursor={{
+              stroke: "#e2e8f0",
+            }}
+            contentStyle={{
+              backgroundColor: "#ffffff",
+              border: "1px solid #e5eaf0",
+              borderRadius: "8px",
+              boxShadow:
+                "0 8px 24px rgba(15,23,42,0.08)",
+              fontSize: "12px",
+            }}
+          />
 
-            <YAxis
-              domain={[50, 100]}
-              stroke="#64748b"
-              tickLine={false}
-              axisLine={false}
-              width={35}
-            />
-
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#020617",
-                border: "1px solid #1e293b",
-                borderRadius: "12px",
-              }}
-              labelStyle={{
-                color: "#94a3b8",
-              }}
-            />
-
-            <Line
-              type="monotone"
-              dataKey="score"
-              stroke="#3b82f6"
-              strokeWidth={3}
-              dot={{
-                fill: "#3b82f6",
-                strokeWidth: 0,
-                r: 4,
-              }}
-              activeDot={{
-                r: 6,
-              }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+          <Line
+            type="monotone"
+            dataKey="score"
+            stroke="#4f46e5"
+            strokeWidth={2.5}
+            dot={{
+              fill: "#ffffff",
+              stroke: "#4f46e5",
+              strokeWidth: 2,
+              r: 3,
+            }}
+            activeDot={{
+              fill: "#4f46e5",
+              stroke: "#ffffff",
+              strokeWidth: 2,
+              r: 5,
+            }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }

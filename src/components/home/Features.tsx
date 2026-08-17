@@ -10,7 +10,7 @@ const features = [
     icon: FileText,
     title: "CV Analysis",
     description:
-      "Get AI-powered feedback on your resume, strengths, weaknesses and missing details.",
+      "Review your resume, strengths, weaknesses and missing details.",
   },
   {
     icon: MessageSquare,
@@ -20,7 +20,7 @@ const features = [
   },
   {
     icon: Brain,
-    title: "AI Feedback",
+    title: "Detailed Feedback",
     description:
       "Receive detailed feedback on clarity, relevance, STAR structure and answer quality.",
   },
@@ -41,7 +41,7 @@ export default function Features() {
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-            AI Interview Coach
+            Interview preparation
           </p>
 
           <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">

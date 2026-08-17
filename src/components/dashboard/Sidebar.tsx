@@ -7,12 +7,12 @@ import {
   BarChart3,
   FileText,
   GitCompareArrows,
-  LayoutDashboard,
+  Home,
   LoaderCircle,
   LogOut,
   MessageSquare,
   Settings,
-  Sparkles,
+  Sparkle,
   UserRound,
 } from "lucide-react";
 
@@ -20,29 +20,29 @@ import { createClient } from "@/src/lib/supabase/client";
 
 const navigation = [
   {
-    name: "Dashboard",
+    name: "Home",
     href: "/dashboard",
-    icon: LayoutDashboard,
+    icon: Home,
   },
   {
-    name: "CV Analysis",
+    name: "Interview",
+    href: "/dashboard/interview/new",
+    icon: MessageSquare,
+  },
+  {
+    name: "Resume",
     href: "/dashboard/cv",
     icon: FileText,
   },
   {
-    name: "Mock Interviews",
-    href: "/dashboard/interview/new",
-    icon: MessageSquare,
+    name: "Compare",
+    href: "/dashboard/compare",
+    icon: GitCompareArrows,
   },
   {
     name: "Progress",
     href: "/dashboard/progress",
     icon: BarChart3,
-  },
-  {
-    name: "Compare CVs",
-    href: "/dashboard/compare",
-    icon: GitCompareArrows,
   },
   {
     name: "Settings",
@@ -109,103 +109,154 @@ export default function Sidebar() {
     ? email.charAt(0).toUpperCase()
     : "U";
 
+  const displayName = email
+    ? email.split("@")[0]
+    : "Account";
+
   return (
-    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col border-r border-slate-800/80 bg-slate-950/90 px-4 py-6 backdrop-blur-xl lg:flex">
-      <Link
-        href="/dashboard"
-        className="flex items-center gap-3 px-3"
-      >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 shadow-lg shadow-blue-500/20">
-          <Sparkles size={20} />
-        </div>
+    <aside className="fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col overflow-hidden bg-[#073f39] text-white lg:flex">
+      {/* subtle sidebar depth */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(45,138,120,0.18),transparent_32%)]" />
 
-        <div>
-          <p className="text-lg font-bold tracking-tight text-white">
-            InterviewLab
-          </p>
+      <div className="relative flex min-h-0 flex-1 flex-col px-5 py-6">
+        {/* LOGO */}
 
-          <p className="text-xs text-slate-500">
-            AI Interview Coach
-          </p>
-        </div>
-      </Link>
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-3 px-1"
+        >
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16806f] text-sm font-bold tracking-tight text-white shadow-sm">
+            IL
+          </div>
 
-      <nav className="mt-10 flex flex-1 flex-col gap-1.5">
-        {navigation.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.href);
+          <div>
+            <p className="text-[16px] font-semibold tracking-[-0.02em] text-white">
+              InterviewLab
+            </p>
 
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${
-                active
-                  ? "bg-blue-500/10 text-white"
-                  : "text-slate-400 hover:bg-slate-900 hover:text-white"
-              }`}
-            >
-              <Icon
-                size={19}
-                className={
+            <p className="mt-0.5 text-[10px] text-white/45">
+              Interview preparation
+            </p>
+          </div>
+        </Link>
+
+        {/* NAVIGATION */}
+
+        <nav className="mt-9 flex flex-col gap-1.5">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.href);
+
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`group flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium transition-all ${
                   active
-                    ? "text-blue-400"
-                    : "transition group-hover:text-blue-400"
-                }
+                    ? "bg-[#176c60] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
+                    : "text-white/70 hover:bg-white/[0.07] hover:text-white"
+                }`}
+              >
+                <Icon
+                  size={19}
+                  strokeWidth={active ? 2 : 1.8}
+                  className={
+                    active
+                      ? "text-white"
+                      : "text-white/55 transition group-hover:text-white/85"
+                  }
+                />
+
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* PRO TIP */}
+
+        <div className="mt-8 border-t border-white/10 pt-7">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
+            <div className="flex items-center gap-2">
+              <Sparkle
+                size={16}
+                className="text-[#efc56b]"
+                fill="currentColor"
               />
 
-              <span className="flex-1">
-                {item.name}
-              </span>
+              <p className="text-sm font-semibold text-white">
+                Pro tip
+              </p>
+            </div>
 
-              {active && (
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-              )}
-            </Link>
-          );
-        })}
-      </nav>
-
-      <div className="border-t border-slate-800 pt-4">
-        <div className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-sm font-bold text-slate-200">
-            {email ? (
-              initials
-            ) : (
-              <UserRound size={18} />
-            )}
-          </div>
-
-          <div className="min-w-0">
-            <p className="text-xs text-slate-500">
-              Signed in as
+            <p className="mt-3 text-xs leading-5 text-white/60">
+              Consistency is key. Practice a little every day to see better
+              results.
             </p>
 
-            <p className="truncate text-sm font-medium text-slate-300">
-              {email || "Loading..."}
-            </p>
+            <div className="mt-5 flex items-center justify-between">
+              <p className="text-xs font-semibold text-white/85">
+                Weekly goal
+              </p>
+
+              <p className="text-[11px] text-white/45">
+                3 / 5
+              </p>
+            </div>
+
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+              <div className="h-full w-3/5 rounded-full bg-[#4fae9b]" />
+            </div>
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleSignOut}
-          disabled={isSigningOut}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-500 transition hover:bg-red-500/10 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSigningOut ? (
-            <LoaderCircle
-              size={19}
-              className="animate-spin"
-            />
-          ) : (
-            <LogOut size={19} />
-          )}
+        {/* pushes account area down */}
+        <div className="min-h-5 flex-1" />
 
-          {isSigningOut
-            ? "Signing out..."
-            : "Sign out"}
-        </button>
+        {/* ACCOUNT */}
+
+        <div className="border-t border-white/10 pt-4">
+          <Link
+            href="/dashboard/settings"
+            className="group flex items-center gap-3 rounded-xl px-2 py-3 transition hover:bg-white/[0.06]"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#16806f] text-sm font-semibold text-white">
+              {email ? initials : <UserRound size={17} />}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-white">
+                {displayName}
+              </p>
+
+              <p className="mt-0.5 text-[11px] text-white/45">
+                View profile
+              </p>
+            </div>
+
+            <span className="text-lg text-white/35 transition group-hover:translate-x-0.5 group-hover:text-white/70">
+              ›
+            </span>
+          </Link>
+
+          <button
+            type="button"
+            onClick={handleSignOut}
+            disabled={isSigningOut}
+            className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-white/65 transition hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isSigningOut ? (
+              <LoaderCircle
+                size={19}
+                className="animate-spin"
+              />
+            ) : (
+              <LogOut size={19} strokeWidth={1.8} />
+            )}
+
+            {isSigningOut ? "Signing out..." : "Log out"}
+          </button>
+        </div>
       </div>
     </aside>
   );

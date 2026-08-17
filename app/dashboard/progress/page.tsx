@@ -152,20 +152,20 @@ export default async function ProgressPage() {
       <div className="px-5 py-6 sm:px-6 lg:ml-64 lg:px-8 lg:py-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#dfeae6] text-[#17685d]">
               <BarChart3 size={23} />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#17685d]">
                 Progress
               </p>
 
-              <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#202522] sm:text-4xl">
                 Interview performance
               </h1>
 
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base">
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#667176] sm:text-base">
                 Track how your interview skills change across practice sessions.
               </p>
             </div>
@@ -201,13 +201,13 @@ export default async function ProgressPage() {
             />
           </div>
 
-          <section className="mt-8 rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+          <section className="mt-8 rounded-3xl border border-[#c6cdca] bg-[#edf1ef] p-7">
             <div>
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-xl font-semibold text-[#202522]">
                 Overall score trend
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-[#7a858a]">
                 Your interview score across completed sessions.
               </p>
             </div>
@@ -220,12 +220,12 @@ export default async function ProgressPage() {
           </section>
 
           <div className="mt-8 grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-            <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-7">
+            <section className="rounded-3xl border border-[#c2cbc7] bg-[#e1e8e5] p-7">
               <h2 className="text-xl font-semibold">
                 Skill breakdown
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-[#7a858a]">
                 Average performance across your completed interviews.
               </p>
 
@@ -233,7 +233,7 @@ export default async function ProgressPage() {
                 {metrics.map(([label, value]) => (
                   <div key={label}>
                     <div className="flex justify-between text-sm">
-                      <span className="text-slate-300">
+                      <span className="text-[#3f494d]">
                         {label}
                       </span>
 
@@ -242,9 +242,9 @@ export default async function ProgressPage() {
                       </span>
                     </div>
 
-                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-800">
+                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#cfd6d3]">
                       <div
-                        className="h-full rounded-full bg-blue-500"
+                        className="h-full rounded-full bg-[#17685d]"
                         style={{
                           width: `${value}%`,
                         }}
@@ -255,38 +255,66 @@ export default async function ProgressPage() {
               </div>
             </section>
 
-            <section className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-7">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-400">
-                Focus area
-              </p>
+            <section className="relative overflow-hidden rounded-3xl border border-[#9eb4ad] bg-[#bed3cc] p-7">
+              <div className="absolute right-0 top-0 h-28 w-28 translate-x-8 -translate-y-8 rounded-full bg-[#17685d]/5" />
 
-              {scoredInterviews.length > 0 ? (
-                <>
-                  <h2 className="mt-3 text-2xl font-bold">
-                    {weakestMetric[0]}
-                  </h2>
+              <div className="relative">
+                <div className="flex items-center gap-3">
+                  <span className="h-2 w-2 rounded-full bg-[#17685d]" />
 
-                  <p className="mt-2 text-3xl font-bold text-amber-300">
-                    {weakestMetric[1]}/100
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#3e625c]">
+                    Priority for next session
                   </p>
+                </div>
 
-                  <p className="mt-4 text-sm leading-6 text-slate-400">
-                    This is currently your lowest average interview metric.
-                    Prioritize it during your next practice session.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <h2 className="mt-3 text-xl font-semibold">
-                    Complete your first interview
-                  </h2>
+                {scoredInterviews.length > 0 ? (
+                  <>
+                    <div className="mt-5 flex items-end justify-between gap-5">
+                      <h2 className="text-2xl font-semibold tracking-[-0.02em] text-[#202522]">
+                        {weakestMetric[0]}
+                      </h2>
 
-                  <p className="mt-3 text-sm leading-6 text-slate-400">
-                    InterviewLab will identify the skill that needs the most
-                    attention once you have completed a session.
-                  </p>
-                </>
-              )}
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-4xl font-semibold tracking-[-0.04em] text-[#17685d]">
+                          {weakestMetric[1]}
+                        </span>
+
+                        <span className="text-sm font-medium text-[#6d7773]">
+                          /100
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-[#a6bbb5]">
+                      <div
+                        className="h-full rounded-full bg-[#17685d]"
+                        style={{
+                          width: `${Math.max(
+                            0,
+                            Math.min(100, weakestMetric[1])
+                          )}%`,
+                        }}
+                      />
+                    </div>
+
+                    <p className="mt-5 max-w-lg text-sm leading-6 text-[#49605b]">
+                      Your lowest average skill right now. Give it extra
+                      attention in your next practice interview.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="mt-5 text-xl font-semibold text-[#202522]">
+                      Complete your first interview
+                    </h2>
+
+                    <p className="mt-3 max-w-lg text-sm leading-6 text-[#49605b]">
+                      Once you complete a session, InterviewLab will show you
+                      which interview skill deserves the most attention.
+                    </p>
+                  </>
+                )}
+              </div>
             </section>
           </div>
         </div>

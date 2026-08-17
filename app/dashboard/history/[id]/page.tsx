@@ -64,31 +64,31 @@ export default async function HistoryPage({
         <div className="mx-auto max-w-6xl">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white"
+            className="inline-flex items-center gap-2 text-sm text-[#68736e] transition hover:text-[#17685d]"
           >
             <ArrowLeft size={17} />
             Back to dashboard
           </Link>
 
-          <div className="mt-8 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-6">
+          <div className="mt-8 rounded-2xl border border-[#cfd8d3] bg-[#f3f5f2] p-6">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#dfeae6] text-[#17685d]">
                   <FileText size={22} />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-400">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#17685d]">
                     Saved analysis
                   </p>
 
-                  <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
+                  <h1 className="mt-2 text-2xl font-bold text-[#202522] sm:text-3xl">
                     {savedAnalysis.file_name}
                   </h1>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-sm text-slate-500">
+              <div className="flex items-center gap-2 text-sm text-[#78827d]">
                 <CalendarDays size={17} />
 
                 {new Date(
@@ -102,12 +102,12 @@ export default async function HistoryPage({
             </div>
 
             {savedAnalysis.job_description && (
-              <div className="mt-6 border-t border-slate-800 pt-6">
-                <p className="text-sm font-medium text-slate-300">
+              <div className="mt-6 border-t border-[#d9dfdb] pt-6">
+                <p className="text-sm font-medium text-[#39433e]">
                   Job description used
                 </p>
 
-                <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-500">
+                <p className="mt-2 line-clamp-3 text-sm leading-6 text-[#727c77]">
                   {savedAnalysis.job_description}
                 </p>
               </div>

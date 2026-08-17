@@ -5,7 +5,7 @@ export default function Hero() {
         <h1 className="text-6xl font-bold">InterviewLab</h1>
 
         <p className="mt-6 text-xl text-slate-300">
-          AI-powered interview preparation platform.
+          Interview preparation built around your resume and target role.
         </p>
 
         <div className="mt-10 flex justify-center gap-4">

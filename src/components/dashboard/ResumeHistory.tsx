@@ -21,7 +21,7 @@ export default function ResumeHistory({
           </h2>
 
           <p className="mt-1 text-sm text-slate-500">
-            Your latest AI resume reports
+            Your latest resume reports
           </p>
         </div>
 

@@ -78,6 +78,15 @@ export default async function LoginPage({
                 placeholder="Your password"
                 className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 outline-none transition focus:border-blue-500"
               />
+
+              <div className="mt-2 text-right">
+                <Link
+                  href="/forgot-password"
+                  className="text-sm font-medium text-blue-400 transition hover:text-blue-300"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             <button

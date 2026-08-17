@@ -36,7 +36,7 @@ export default function AnalysisProgress({
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold text-white">
-            InterviewLab AI is working
+            InterviewLab is working
           </p>
 
           <p className="mt-1 text-xs text-slate-500">
@@ -103,7 +103,7 @@ export default function AnalysisProgress({
 
       <div className="mt-6 h-1.5 overflow-hidden rounded-full bg-slate-800">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-violet-500 transition-all duration-700"
+          className="h-full rounded-full bg-blue-500 transition-all duration-700"
           style={{
             width: `${Math.min(100, ((step + 1) / steps.length) * 100)}%`,
           }}
